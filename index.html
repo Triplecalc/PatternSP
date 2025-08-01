@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Формы для работы с клиентами</title>
+    <title>Шаблоны С+</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,8 +112,8 @@
             <div class="form-group">
                 <label>Кто это:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="role1" value="agent"> Агент</label>
-                    <label><input type="radio" name="role1" value="client"> Клиент</label>
+                    <label><input type="radio" name="Обращается" value="Агент"> Агент</label>
+                    <label><input type="radio" name="Обращается" value="Клиент"> Клиент</label>
                 </div>
             </div>
             <div class="form-group">
@@ -184,16 +184,16 @@
             <div class="form-group">
                 <label>Кто это:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="role2" value="agent"> Агент</label>
-                    <label><input type="radio" name="role2" value="client"> Клиент</label>
+                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
+                    <label><input type="radio" name="Роль" value="клиент"> Клиент</label>
                 </div>
             </div>
             
             <div class="form-group">
                 <label>Покупка/аренда:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="deal-type2" value="purchase"> Покупка</label>
-                    <label><input type="radio" name="deal-type2" value="rent"> Аренда</label>
+                    <label><input type="radio" name="Покупка/Аренда" value="Покупка"> Покупка</label>
+                    <label><input type="radio" name="Покупка/Аренда" value="Аренда"> Аренда</label>
                 </div>
             </div>
             
@@ -205,8 +205,8 @@
             <div class="form-group">
                 <label>Тип:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="property-type2" value="primary"> Первичка</label>
-                    <label><input type="radio" name="property-type2" value="secondary"> Вторичка</label>
+                    <label><input type="radio" name="Тип" value="Первичка"> Первичка</label>
+                    <label><input type="radio" name="Тип" value="Вторичка"> Вторичка</label>
                 </div>
             </div>
             
@@ -296,16 +296,16 @@
             <div class="form-group">
                 <label>Кто это:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="role3" value="agent"> Агент</label>
-                    <label><input type="radio" name="role3" value="client"> Клиент</label>
+                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
+                    <label><input type="radio" name="Роль" value="агент"> Клиент</label>
                 </div>
             </div>
             
             <div class="form-group">
                 <label>Продажа/Сдача:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="deal-type3" value="sale"> Продажа</label>
-                    <label><input type="radio" name="deal-type3" value="rent"> Сдача</label>
+                    <label><input type="radio" name="Тип" value="Продажа"> Продажа</label>
+                    <label><input type="radio" name="Тип" value="Сдача в аренду"> Сдача</label>
                 </div>
             </div>
             
@@ -349,8 +349,8 @@
             <div class="form-group">
                 <label>Кто это:</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="role4" value="agent"> Агент</label>
-                    <label><input type="radio" name="role4" value="client"> Клиент</label>
+                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
+                    <label><input type="radio" name="Роль" value="клиент"> Клиент</label>
                 </div>
             </div>
             
@@ -453,7 +453,7 @@
             }
             
             // Показываем/скрываем состав бюджета в зависимости от типа сделки
-            const dealType = document.querySelector('input[name="deal-type2"]:checked');
+            const dealType = document.querySelector('input[name="Покупка/Аренда"]:checked');
             if (dealType && dealType.value === 'purchase') {
                 document.getElementById('budget-composition').style.display = 'block';
             } else {
