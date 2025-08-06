@@ -5,430 +5,664 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Шаблоны С+</title>
     <style>
+        /* Основные стили */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #2c3e50;
+            background-color: #f8f9fa;
         }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        /* Вкладки */
         .tabs {
             display: flex;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 0;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            padding: 0 15px;
         }
+        
         .tab {
-            padding: 10px 20px;
+            padding: 12px 20px;
             cursor: pointer;
-            background-color: #f1f1f1;
-            margin-right: 5px;
-            border-radius: 5px 5px 0 0;
-            transition: background-color 0.3s;
+            background-color: transparent;
+            margin-right: 0;
+            border-radius: 0;
+            transition: all 0.3s;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #495057;
+            white-space: nowrap;
         }
+        
         .tab:hover {
-            background-color: #ddd;
+            background-color: #e9ecef;
+            color: #2c3e50;
         }
+        
         .tab.active {
-            background-color: #4CAF50;
-            color: white;
+            background-color: transparent;
+            color: #3498db;
+            border-bottom-color: #3498db;
         }
+        
+        /* Контент вкладок */
         .tab-content {
             display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 0 0 5px 5px;
-            background-color: #f9f9f9;
-            width: 100%;
+            padding: 25px;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background-color: white;
         }
+        
         .tab-content.active {
             display: block;
         }
+        
+        /* Формы */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
+        
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
         }
-        input[type="text"], input[type="tel"], select, textarea {
+        
+        input[type="text"], 
+        input[type="tel"], 
+        select, 
+        textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
             box-sizing: border-box;
-            max-width: 300px;
+            max-width: 400px;
+            font-size: 15px;
+            transition: border-color 0.15s;
         }
-        .radio-group, .checkbox-group {
-            margin-top: 5px;
+        
+        input[type="text"]:focus, 
+        input[type="tel"]:focus, 
+        select:focus, 
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
-        .radio-group label, .checkbox-group label {
+        
+        textarea {
+            max-width: 500px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Стили для радио-кнопок с подсветкой выбранного */
+        .radio-group {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .radio-option {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .radio-label {
             display: inline-block;
-            margin-right: 15px;
-            font-weight: normal;
+            padding: 8px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: white;
             cursor: pointer;
+            transition: all 0.2s;
         }
-        button {
-            background-color: #4CAF50;
+        
+        .radio-option input[type="radio"]:checked + .radio-label {
+            background-color: #3498db;
             color: white;
-            padding: 10px 15px;
+            border-color: #3498db;
+        }
+        
+        .radio-option input[type="radio"]:focus + .radio-label {
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        /* Чекбоксы для бюджета */
+        .budget-composition {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .budget-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .budget-option input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        /* Кнопки */
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
         button:hover {
-            background-color: #45a049;
+            background-color: #2980b9;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
         }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        /* Условные поля */
         .conditional-field {
             display: none;
-            margin-top: 10px;
-            margin-left: 20px;
+            margin-top: 15px;
+            margin-left: 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #3498db;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .tab-content {
+                padding: 15px;
+            }
+            
+            input[type="text"], 
+            input[type="tel"], 
+            select, 
+            textarea {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="tabs">
-        <div class="tab active" data-tab="tab1">Покупка/аренда конкретного ОН</div>
-        <div class="tab" data-tab="tab2">Покупка/аренда. Подбор</div>
-        <div class="tab" data-tab="tab3">Продать/сдать. Лид на офис</div>
-        <div class="tab" data-tab="tab4">Веб заявка</div>
-        <div class="tab" data-tab="tab5">Звонок по вакансии</div>
-        <div class="tab" data-tab="tab6">Жалоба - снять ОН</div>
-    </div>
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="tab1">Покупка/аренда конкретного ОН</div>
+            <div class="tab" data-tab="tab2">Покупка/аренда. Подбор</div>
+            <div class="tab" data-tab="tab3">Продать/сдать. Лид на офис</div>
+            <div class="tab" data-tab="tab4">Веб заявка</div>
+            <div class="tab" data-tab="tab6">Жалоба - снять ОН</div>
+        </div>
 
-    <!-- Покупка/аренда конкретного ОН -->
-    <div id="tab1" class="tab-content active">
-        <form id="form1">
-            <div class="form-group">
-                <label for="source1">Источник:</label>
-                <input type="text" id="source1" name="source1" maxlength="30">
-            </div>
-            <div class="form-group">
-                <label for="name1">Имя:</label>
-                <input type="text" id="name1" name="name1" maxlength="20">
-            </div>
-            <div class="form-group">
-                <label>Кто это:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Обращается" value="Агент"> Агент</label>
-                    <label><input type="radio" name="Обращается" value="Клиент"> Клиент</label>
+        <!-- Покупка/аренда конкретного ОН -->
+        <div id="tab1" class="tab-content active">
+            <form id="form1">
+                <div class="form-group">
+                    <label for="source1">Источник:</label>
+                    <input type="text" id="source1" name="source1" maxlength="30">
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="address1">Адрес подбора:</label>
-                <input type="text" id="address1" name="address1" maxlength="100">
-            </div>
-            <div class="form-group">
-                <label for="price1">Стоимость объекта:</label>
-                <input type="text" id="price1" name="price1" maxlength="20">
-            </div>
-            <div class="form-group">
-                <label for="agent-name1">Имя агента в ОН:</label>
-                <input type="text" id="agent-name1" name="agent-name1" maxlength="20">
-            </div>
-            <button type="button" onclick="copyFormData('form1')">Копировать</button>
-        </form>
-    </div>
+                <div class="form-group">
+                    <label for="name1">Имя:</label>
+                    <input type="text" id="name1" name="name1" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label>Кто это:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent1" name="Обращается" value="Агент" checked>
+                            <label for="agent1" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client1" name="Обращается" value="Клиент">
+                            <label for="client1" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address1">Адрес подбора:</label>
+                    <input type="text" id="address1" name="address1" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="price1">Стоимость объекта:</label>
+                    <input type="text" id="price1" name="price1" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label>ОН:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="found" name="on-status" value="Найден" checked>
+                            <label for="found" class="radio-label">Найден</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="not-found" name="on-status" value="Не найден">
+                            <label for="not-found" class="radio-label">Не найден</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="additional-agent-field" class="conditional-field">
+                    <label for="additional-agent">ФИО агента:</label>
+                    <input type="text" id="additional-agent" name="additional-agent" maxlength="50">
+                </div>
+                <button type="button" onclick="copyFormData('form1')">Копировать</button>
+            </form>
+        </div>
 
-    <!-- Покупка/аренда. Подбор -->
-    <div id="tab2" class="tab-content">
-        <form id="form2">
-            <div class="form-group">
-                <label for="source2">Источник:</label>
-                <select id="source2" name="source2" onchange="showConditionalFields2()">
-                    <option value="">Выберите источник</option>
-                    <option value="banner">Баннер</option>
-                    <option value="penza-banner">Пенза баннер</option>
-                    <option value="city-street">Город+Улица</option>
-                    <option value="maps-call">Звонок с карт</option>
-                    <option value="other-sources">Др.источники</option>
-                </select>
-            </div>
-            
-            <div id="city-street-field" class="conditional-field">
-                <label for="city-street-detail">Город+Улица:</label>
-                <input type="text" id="city-street-detail" name="city-street-detail" maxlength="30">
-            </div>
-            
-            <div id="penza-banner-field" class="conditional-field">
-                <label for="banner-address">Адрес баннера:</label>
-                <input type="text" id="banner-address" name="banner-address" maxlength="50">
-            </div>
-            
-            <div id="maps-call-fields" class="conditional-field">
-                <label for="maps-city">Город:</label>
-                <input type="text" id="maps-city" name="maps-city" maxlength="30">
+        <!-- Покупка/аренда. Подбор -->
+        <div id="tab2" class="tab-content">
+            <form id="form2">
+                <div class="form-group">
+                    <label for="source2">Источник:</label>
+                    <select id="source2" name="source2">
+                        <option value="">Выберите источник</option>
+                        <option value="Баннер">Баннер</option>
+                        <option value="Пенза баннер">Пенза баннер</option>
+                        <option value="Город+Улица">Город+Улица</option>
+                        <option value="Звонок с карт">Звонок с карт</option>
+                        <option value="Другие источники">Др.источники</option>
+                    </select>
+                </div>
                 
-                <label for="office-address">Адрес офиса:</label>
-                <input type="text" id="office-address" name="office-address" maxlength="30">
-            </div>
-            
-            <div id="other-sources-fields" class="conditional-field">
-                <label for="other-city">Город:</label>
-                <input type="text" id="other-city" name="other-city" maxlength="30">
+                <div id="city-street-field" class="conditional-field">
+                    <label for="city-street-detail">Город+Улица:</label>
+                    <input type="text" id="city-street-detail" name="city-street-detail" maxlength="30">
+                </div>
                 
-                <label for="other-office-address">Адрес офиса:</label>
-                <input type="text" id="other-office-address" name="other-office-address" maxlength="30">
+                <div id="penza-banner-field" class="conditional-field">
+                    <label for="banner-address">Адрес баннера:</label>
+                    <input type="text" id="banner-address" name="banner-address" maxlength="50">
+                </div>
                 
-                <label for="nearby">Рядом:</label>
-                <input type="text" id="nearby" name="nearby" maxlength="50">
-            </div>
-            
-            <div class="form-group">
-                <label for="name2">Имя:</label>
-                <input type="text" id="name2" name="name2" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label>Кто это:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
-                    <label><input type="radio" name="Роль" value="клиент"> Клиент</label>
+                <div id="maps-call-fields" class="conditional-field">
+                    <label for="maps-city">Город:</label>
+                    <input type="text" id="maps-city" name="maps-city" maxlength="30">
+                    
+                    <label for="office-address">Адрес офиса:</label>
+                    <input type="text" id="office-address" name="office-address" maxlength="30">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Покупка/аренда:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Покупка/Аренда" value="Покупка"> Покупка</label>
-                    <label><input type="radio" name="Покупка/Аренда" value="Аренда"> Аренда</label>
+                
+                <div id="other-sources-fields" class="conditional-field">
+                    <label for="other-city">Город:</label>
+                    <input type="text" id="other-city" name="other-city" maxlength="30">
+                    
+                    <label for="other-office-address">Адрес офиса:</label>
+                    <input type="text" id="other-office-address" name="other-office-address" maxlength="30">
+                    
+                    <label for="nearby">Рядом:</label>
+                    <input type="text" id="nearby" name="nearby" maxlength="50">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="district">Район подбора:</label>
-                <input type="text" id="district" name="district" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label>Тип:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Тип" value="Первичка"> Первичка</label>
-                    <label><input type="radio" name="Тип" value="Вторичка"> Вторичка</label>
+                
+                <div class="form-group">
+                    <label for="name2">Имя:</label>
+                    <input type="text" id="name2" name="name2" maxlength="20">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="rooms">Кол.комнат:</label>
-                <input type="text" id="rooms" name="rooms" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="area">Площадь:</label>
-                <input type="text" id="area" name="area" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label for="floor">Этаж:</label>
-                <input type="text" id="floor" name="floor" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="budget">Бюджет:</label>
-                <input type="text" id="budget" name="budget" maxlength="30">
-            </div>
-            
-            <div id="budget-composition" class="form-group" style="display: none;">
-                <label>Из чего состоит бюджет:</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="budget-composition" value="own-funds"> Собственные средства</label>
-                    <label><input type="checkbox" name="budget-composition" value="mortgage"> Ипотека</label>
-                    <label><input type="checkbox" name="budget-composition" value="maternity-capital"> Материнский капитал</label>
-                    <label><input type="checkbox" name="budget-composition" value="credit"> Кредит</label>
+                
+                <div class="form-group">
+                    <label>Кто это:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent2" name="Роль" value="агент" checked>
+                            <label for="agent2" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client2" name="Роль" value="клиент">
+                            <label for="client2" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <button type="button" onclick="copyFormData('form2')">Копировать</button>
-        </form>
-    </div>
+                
+                <div class="form-group">
+                    <label>Покупка/аренда:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="purchase" name="Покупка/Аренда" value="Покупка" checked>
+                            <label for="purchase" class="radio-label">Покупка</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="rent" name="Покупка/Аренда" value="Аренда">
+                            <label for="rent" class="radio-label">Аренда</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="district">Район подбора:</label>
+                    <input type="text" id="district" name="district" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label>Тип:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="primary" name="Тип" value="Первичка" checked>
+                            <label for="primary" class="radio-label">Первичка</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="secondary" name="Тип" value="Вторичка">
+                            <label for="secondary" class="radio-label">Вторичка</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rooms">Кол.комнат:</label>
+                    <input type="text" id="rooms" name="rooms" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="area">Площадь:</label>
+                    <input type="text" id="area" name="area" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="floor">Этаж:</label>
+                    <input type="text" id="floor" name="floor" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget">Бюджет:</label>
+                    <input type="text" id="budget" name="budget" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label>Бюджет состоит из:</label>
+                    <div class="budget-composition">
+                        <div class="budget-option">
+                            <input type="checkbox" id="budget-mortgage" name="budget-composition[]" value="Ипотека">
+                            <label for="budget-mortgage">Ипотека</label>
+                        </div>
+                        <div class="budget-option">
+                            <input type="checkbox" id="budget-maternity" name="budget-composition[]" value="Мат.кап">
+                            <label for="budget-maternity">Мат.кап</label>
+                        </div>
+                        <div class="budget-option">
+                            <input type="checkbox" id="budget-cash" name="budget-composition[]" value="Наличка">
+                            <label for="budget-cash">Наличка</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additional-wishes">Дополнительные пожелания:</label>
+                    <textarea id="additional-wishes" name="additional-wishes" maxlength="500"></textarea>
+                </div>
+                
+                <button type="button" onclick="copyFormData('form2')">Копировать</button>
+            </form>
+        </div>
 
-    <!-- Продать/сдать. Лид на офис -->
-    <div id="tab3" class="tab-content">
-        <form id="form3">
-            <div class="form-group">
-                <label for="source3">Источник:</label>
-                <select id="source3" name="source3" onchange="showConditionalFields3()">
-                    <option value="">Выберите источник</option>
-                    <option value="banner">Баннер</option>
-                    <option value="penza-banner">Пенза баннер</option>
-                    <option value="city-street">Город+Улица</option>
-                    <option value="maps-call">Звонок с карт</option>
-                    <option value="other-sources">Др.источники</option>
-                </select>
-            </div>
-            
-            <div id="city-street-field3" class="conditional-field">
-                <label for="city-street-detail3">Город+Улица:</label>
-                <input type="text" id="city-street-detail3" name="city-street-detail3" maxlength="30">
-            </div>
-            
-            <div id="penza-banner-field3" class="conditional-field">
-                <label for="banner-address3">Адрес баннера:</label>
-                <input type="text" id="banner-address3" name="banner-address3" maxlength="50">
-            </div>
-            
-            <div id="maps-call-fields3" class="conditional-field">
-                <label for="maps-city3">Город:</label>
-                <input type="text" id="maps-city3" name="maps-city3" maxlength="30">
-                
-                <label for="office-address3">Адрес офиса:</label>
-                <input type="text" id="office-address3" name="office-address3" maxlength="30">
-            </div>
-            
-            <div id="other-sources-fields3" class="conditional-field">
-                <label for="other-city3">Город:</label>
-                <input type="text" id="other-city3" name="other-city3" maxlength="30">
-                
-                <label for="other-office-address3">Адрес офиса:</label>
-                <input type="text" id="other-office-address3" name="other-office-address3" maxlength="30">
-                
-                <label for="nearby3">Рядом:</label>
-                <input type="text" id="nearby3" name="nearby3" maxlength="50">
-            </div>
-            
-            <div class="form-group">
-                <label for="name3">Имя:</label>
-                <input type="text" id="name3" name="name3" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label>Кто это:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
-                    <label><input type="radio" name="Роль" value="агент"> Клиент</label>
+        <!-- Продать/сдать. Лид на офис -->
+        <div id="tab3" class="tab-content">
+            <form id="form3">
+                <div class="form-group">
+                    <label for="source3">Источник:</label>
+                    <select id="source3" name="source3">
+                        <option value="">Выберите источник</option>
+                        <option value="Баннер">Баннер</option>
+                        <option value="Пенза баннер">Пенза баннер</option>
+                        <option value="Город+Улица">Город+Улица</option>
+                        <option value="Звонок с карт">Звонок с карт</option>
+                        <option value="Другие источники">Др.источники</option>
+                    </select>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Продажа/Сдача:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Тип" value="Продажа"> Продажа</label>
-                    <label><input type="radio" name="Тип" value="Сдача в аренду"> Сдача</label>
+                
+                <div id="city-street-field3" class="conditional-field">
+                    <label for="city-street-detail3">Город+Улица:</label>
+                    <input type="text" id="city-street-detail3" name="city-street-detail3" maxlength="30">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="object-address">Адрес объекта:</label>
-                <input type="text" id="object-address" name="object-address" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="rooms3">Кол.комнат:</label>
-                <input type="text" id="rooms3" name="rooms3" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="area3">Площадь:</label>
-                <input type="text" id="area3" name="area3" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label for="floor3">Этаж:</label>
-                <input type="text" id="floor3" name="floor3" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="price3">Продает за:</label>
-                <input type="text" id="price3" name="price3" maxlength="40">
-            </div>
-            
-            <button type="button" onclick="copyFormData('form3')">Копировать</button>
-        </form>
-    </div>
-
-    <!-- Веб заявка -->
-    <div id="tab4" class="tab-content">
-        <form id="form4">
-            <div class="form-group">
-                <label for="name4">Имя:</label>
-                <input type="text" id="name4" name="name4" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label>Кто это:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="Роль" value="агент"> Агент</label>
-                    <label><input type="radio" name="Роль" value="клиент"> Клиент</label>
+                
+                <div id="penza-banner-field3" class="conditional-field">
+                    <label for="banner-address3">Адрес баннера:</label>
+                    <input type="text" id="banner-address3" name="banner-address3" maxlength="50">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="mortgage-type">Тип ипотеки:</label>
-                <input type="text" id="mortgage-type" name="mortgage-type" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="city4">Город:</label>
-                <input type="text" id="city4" name="city4" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="street-metro">Улица/Метро:</label>
-                <input type="text" id="street-metro" name="street-metro" maxlength="30">
-            </div>
-            
-            <button type="button" onclick="copyFormData('form4')">Копировать</button>
-        </form>
-    </div>
+                
+                <div id="maps-call-fields3" class="conditional-field">
+                    <label for="maps-city3">Город:</label>
+                    <input type="text" id="maps-city3" name="maps-city3" maxlength="30">
+                    
+                    <label for="office-address3">Адрес офиса:</label>
+                    <input type="text" id="office-address3" name="office-address3" maxlength="30">
+                </div>
+                
+                <div id="other-sources-fields3" class="conditional-field">
+                    <label for="other-city3">Город:</label>
+                    <input type="text" id="other-city3" name="other-city3" maxlength="30">
+                    
+                    <label for="other-office-address3">Адрес офиса:</label>
+                    <input type="text" id="other-office-address3" name="other-office-address3" maxlength="30">
+                    
+                    <label for="nearby3">Рядом:</label>
+                    <input type="text" id="nearby3" name="nearby3" maxlength="50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="name3">Имя:</label>
+                    <input type="text" id="name3" name="name3" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label>Кто это:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent3" name="Роль" value="агент" checked>
+                            <label for="agent3" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client3" name="Роль" value="клиент">
+                            <label for="client3" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Продажа/Сдача:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="sale" name="Тип" value="Продажа" checked>
+                            <label for="sale" class="radio-label">Продажа</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="rental" name="Тип" value="Сдача в аренду">
+                            <label for="rental" class="radio-label">Сдача</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="object-address">Адрес объекта:</label>
+                    <input type="text" id="object-address" name="object-address" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rooms3">Кол.комнат:</label>
+                    <input type="text" id="rooms3" name="rooms3" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="area3">Площадь:</label>
+                    <input type="text" id="area3" name="area3" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="floor3">Этаж:</label>
+                    <input type="text" id="floor3" name="floor3" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="price3">Продает за:</label>
+                    <input type="text" id="price3" name="price3" maxlength="40">
+                </div>
+                
+                <div class="form-group">
+                    <label for="additional-wishes3">Дополнительные пожелания:</label>
+                    <textarea id="additional-wishes3" name="additional-wishes3" maxlength="500"></textarea>
+                </div>
+                
+                <button type="button" onclick="copyFormData('form3')">Копировать</button>
+            </form>
+        </div>
 
-    <!-- Звонок по вакансии -->
-    <div id="tab5" class="tab-content">
-        <form id="form5">
-            <div class="form-group">
-                <label for="name5">Имя:</label>
-                <input type="text" id="name5" name="name5" maxlength="20">
-            </div>
-            
-            <button type="button" onclick="copyFormData('form5')">Копировать</button>
-        </form>
-    </div>
+        <!-- Веб заявка -->
+        <div id="tab4" class="tab-content">
+            <form id="form4">
+                <div class="form-group">
+                    <label for="name4">Имя:</label>
+                    <input type="text" id="name4" name="name4" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label>Кто это:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent4" name="Роль" value="агент" checked>
+                            <label for="agent4" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client4" name="Роль" value="клиент">
+                            <label for="client4" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mortgage-type">Тип ипотеки:</label>
+                    <select id="mortgage-type" name="mortgage-type">
+                        <option value="">Выберите тип</option>
+                        <option value="IT ипотека">IT ипотека</option>
+                        <option value="Семейная ипотека">Семейная ипотека</option>
+                        <option value="Обычная ипотека">Обычная ипотека</option>
+                        <option value="Не определился">Не определился</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="city4">Город:</label>
+                    <input type="text" id="city4" name="city4" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="street-metro">Улица/Метро:</label>
+                    <input type="text" id="street-metro" name="street-metro" maxlength="30">
+                </div>
+                
+                <button type="button" onclick="copyFormData('form4')">Копировать</button>
+            </form>
+        </div>
 
-    <!-- Жалоба - снять ОН -->
-    <div id="tab6" class="tab-content">
-        <form id="form6">
-            <div class="form-group">
-                <label for="name6">Имя:</label>
-                <input type="text" id="name6" name="name6" maxlength="20">
-            </div>
-            
-            <div class="form-group">
-                <label for="phone6">Телефон:</label>
-                <input type="tel" id="phone6" name="phone6" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="agent-name6">ФИО Агента:</label>
-                <input type="text" id="agent-name6" name="agent-name6" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="agent-office6">Офис агента:</label>
-                <input type="text" id="agent-office6" name="agent-office6" maxlength="30">
-            </div>
-            
-            <div class="form-group">
-                <label for="address6">Адрес:</label>
-                <input type="text" id="address6" name="address6" maxlength="30">
-            </div>
-            
-            <button type="button" onclick="copyComplaintData()">Копировать</button>
-        </form>
+        <!-- Жалоба - снять ОН -->
+        <div id="tab6" class="tab-content">
+            <form id="form6">
+                <div class="form-group">
+                    <label for="name6">Имя:</label>
+                    <input type="text" id="name6" name="name6" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone6">Телефон:</label>
+                    <input type="tel" id="phone6" name="phone6" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="agent-name6">ФИО Агента:</label>
+                    <input type="text" id="agent-name6" name="agent-name6" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="agent-office6">Офис агента:</label>
+                    <input type="text" id="agent-office6" name="agent-office6" maxlength="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address6">Адрес:</label>
+                    <input type="text" id="address6" name="address6" maxlength="30">
+                </div>
+                
+                <button type="button" onclick="copyComplaintData()">Копировать</button>
+            </form>
+        </div>
     </div>
 
     <script>
         // Переключение вкладок
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Удаляем активный класс у всех вкладок и контента
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                
-                // Добавляем активный класс к выбранной вкладке и соответствующему контенту
-                tab.classList.add('active');
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация вкладок
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Удаляем активный класс у всех вкладок
+                    document.querySelectorAll('.tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Добавляем активный класс к текущей вкладке
+                    this.classList.add('active');
+                    
+                    // Скрываем все содержимое вкладок
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Показываем содержимое текущей вкладки
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Обработчики для условных полей
+            document.getElementById('source2').addEventListener('change', showConditionalFields2);
+            document.getElementById('source3').addEventListener('change', showConditionalFields3);
+            
+            // Обработчик для поля "ОН"
+            document.getElementById('found').addEventListener('change', function() {
+                document.getElementById('additional-agent-field').style.display = 'none';
+            });
+            document.getElementById('not-found').addEventListener('change', function() {
+                document.getElementById('additional-agent-field').style.display = 'block';
             });
         });
 
@@ -442,22 +676,14 @@
             });
             
             // Показываем нужные поля в зависимости от выбранного источника
-            if (source === 'city-street') {
+            if (source === 'Город+Улица') {
                 document.getElementById('city-street-field').style.display = 'block';
-            } else if (source === 'penza-banner') {
+            } else if (source === 'Пенза баннер') {
                 document.getElementById('penza-banner-field').style.display = 'block';
-            } else if (source === 'maps-call') {
+            } else if (source === 'Звонок с карт') {
                 document.getElementById('maps-call-fields').style.display = 'block';
-            } else if (source === 'other-sources') {
+            } else if (source === 'Другие источники') {
                 document.getElementById('other-sources-fields').style.display = 'block';
-            }
-            
-            // Показываем/скрываем состав бюджета в зависимости от типа сделки
-            const dealType = document.querySelector('input[name="Покупка/Аренда"]:checked');
-            if (dealType && dealType.value === 'purchase') {
-                document.getElementById('budget-composition').style.display = 'block';
-            } else {
-                document.getElementById('budget-composition').style.display = 'none';
             }
         }
         
@@ -471,44 +697,56 @@
             });
             
             // Показываем нужные поля в зависимости от выбранного источника
-            if (source === 'city-street') {
+            if (source === 'Город+Улица') {
                 document.getElementById('city-street-field3').style.display = 'block';
-            } else if (source === 'penza-banner') {
+            } else if (source === 'Пенза баннер') {
                 document.getElementById('penza-banner-field3').style.display = 'block';
-            } else if (source === 'maps-call') {
+            } else if (source === 'Звонок с карт') {
                 document.getElementById('maps-call-fields3').style.display = 'block';
-            } else if (source === 'other-sources') {
+            } else if (source === 'Другие источники') {
                 document.getElementById('other-sources-fields3').style.display = 'block';
             }
         }
-        
-        // Слушаем изменения радиокнопок "Покупка/аренда" в форме 2
-        document.querySelectorAll('input[name="deal-type2"]').forEach(radio => {
-            radio.addEventListener('change', showConditionalFields2);
-        });
 
         // Копирование данных из формы (кроме формы жалобы)
         function copyFormData(formId) {
             const form = document.getElementById(formId);
-            const formData = new FormData(form);
             let result = '';
             
-            for (const [name, value] of formData.entries()) {
-                if (value && value.trim() !== '') {
-                    // Для чекбоксов собираем все отмеченные значения
-                    if (form.elements[name].type === 'checkbox') {
-                        const checkboxes = form.querySelectorAll(`input[name="${name}"]:checked`);
-                        if (checkboxes.length > 0) {
-                            const values = Array.from(checkboxes).map(cb => cb.value).join(', ');
-                            result += `${getFieldLabel(formId, name)}: ${values}\n`;
+            // Добавляем специальный текст для веб-заявки
+            if (formId === 'form4') {
+                result = "Источник: Веб заявка - ипотека\n";
+            }
+            
+            // Обрабатываем все элементы формы
+            Array.from(form.elements).forEach(element => {
+                if (element.name && element.name !== 'on-status') {
+                    // Обработка чекбоксов бюджета
+                    if (element.name === 'budget-composition[]') {
+                        if (element.checked) {
+                            const existing = result.match(/Бюджет состоит из: (.+)/);
+                            if (existing) {
+                                result = result.replace(/Бюджет состоит из: (.+)/, `Бюджет состоит из: ${existing[1]} + ${element.value}`);
+                            } else {
+                                result += `Бюджет состоит из: ${element.value}\n`;
+                            }
                         }
                     } 
-                    // Для радиокнопок и других полей
-                    else {
-                        result += `${getFieldLabel(formId, name)}: ${value}\n`;
+                    // Обработка других чекбоксов
+                    else if (element.type === 'checkbox' || element.type === 'radio') {
+                        if (element.checked) {
+                            result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
+                        }
+                    }
+                    // Обработка остальных полей
+                    else if (element.value && element.value.trim() !== '') {
+                        result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
                     }
                 }
-            }
+            });
+            
+            // Убираем дублирование строки бюджета
+            result = result.replace(/(Бюджет состоит из: .+)\nБюджет состоит из: (.+)/g, 'Бюджет состоит из: $1 + $2');
             
             if (result) {
                 navigator.clipboard.writeText(result.trim())
