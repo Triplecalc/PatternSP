@@ -212,6 +212,34 @@
             border-left: 3px solid #3498db;
         }
         
+        /* Стили для группы выбора тыс/млн */
+        .amount-unit-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .amount-unit-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .amount-unit-option input[type="radio"] {
+            margin-right: 5px;
+        }
+        
+        /* Группа ввода суммы с единицами измерения */
+        .amount-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .amount-input-group input {
+            max-width: 150px;
+        }
+        
         /* Адаптивность */
         @media (max-width: 768px) {
             .tabs {
@@ -233,6 +261,15 @@
             input[type="tel"], 
             select, 
             textarea {
+                max-width: 100%;
+            }
+            
+            .amount-input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .amount-input-group input {
                 max-width: 100%;
             }
         }
@@ -257,7 +294,7 @@
                 </div>
                 <div class="form-group">
                     <label for="name1">Имя:</label>
-                    <input type="text" id="name1" name="name1" maxlength="20">
+                    <input type="text" id="name1" name="name1" maxlength="30">
                 </div>
                 <div class="form-group">
                     <label>Кто это:</label>
@@ -347,7 +384,7 @@
                 
                 <div class="form-group">
                     <label for="name2">Имя:</label>
-                    <input type="text" id="name2" name="name2" maxlength="20">
+                    <input type="text" id="name2" name="name2" maxlength="30">
                 </div>
                 
                 <div class="form-group">
@@ -409,12 +446,24 @@
                 
                 <div class="form-group">
                     <label for="floor">Этаж:</label>
-                    <input type="text" id="floor" name="floor" maxlength="30">
+                    <input type="text" id="floor" name="floor" maxlength="50">
                 </div>
                 
                 <div class="form-group">
                     <label for="budget">Бюджет:</label>
-                    <input type="text" id="budget" name="budget" maxlength="30">
+                    <div class="amount-input-group">
+                        <input type="text" id="budget" name="budget" maxlength="30">
+                        <div class="amount-unit-group">
+                            <div class="amount-unit-option">
+                                <input type="radio" id="budget-thousands" name="budget-unit" value="тыс" checked>
+                                <label for="budget-thousands">тыс</label>
+                            </div>
+                            <div class="amount-unit-option">
+                                <input type="radio" id="budget-millions" name="budget-unit" value="млн">
+                                <label for="budget-millions">млн</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -437,7 +486,7 @@
                 
                 <div class="form-group">
                     <label for="additional-wishes">Дополнительные пожелания:</label>
-                    <textarea id="additional-wishes" name="additional-wishes" maxlength="500"></textarea>
+                    <textarea id="additional-wishes" name="additional-wishes" maxlength="150"></textarea>
                 </div>
                 
                 <button type="button" onclick="copyFormData('form2')">Копировать</button>
@@ -490,7 +539,7 @@
                 
                 <div class="form-group">
                     <label for="name3">Имя:</label>
-                    <input type="text" id="name3" name="name3" maxlength="20">
+                    <input type="text" id="name3" name="name3" maxlength="30">
                 </div>
                 
                 <div class="form-group">
@@ -538,17 +587,29 @@
                 
                 <div class="form-group">
                     <label for="floor3">Этаж:</label>
-                    <input type="text" id="floor3" name="floor3" maxlength="30">
+                    <input type="text" id="floor3" name="floor3" maxlength="50">
                 </div>
                 
                 <div class="form-group">
                     <label for="price3">Продает за:</label>
-                    <input type="text" id="price3" name="price3" maxlength="40">
+                    <div class="amount-input-group">
+                        <input type="text" id="price3" name="price3" maxlength="40">
+                        <div class="amount-unit-group">
+                            <div class="amount-unit-option">
+                                <input type="radio" id="price-thousands" name="price-unit" value="тыс" checked>
+                                <label for="price-thousands">тыс</label>
+                            </div>
+                            <div class="amount-unit-option">
+                                <input type="radio" id="price-millions" name="price-unit" value="млн">
+                                <label for="price-millions">млн</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="additional-wishes3">Дополнительные пожелания:</label>
-                    <textarea id="additional-wishes3" name="additional-wishes3" maxlength="500"></textarea>
+                    <textarea id="additional-wishes3" name="additional-wishes3" maxlength="150"></textarea>
                 </div>
                 
                 <button type="button" onclick="copyFormData('form3')">Копировать</button>
@@ -560,7 +621,7 @@
             <form id="form4">
                 <div class="form-group">
                     <label for="name4">Имя:</label>
-                    <input type="text" id="name4" name="name4" maxlength="20">
+                    <input type="text" id="name4" name="name4" maxlength="30">
                 </div>
                 
                 <div class="form-group">
@@ -584,6 +645,7 @@
                         <option value="IT ипотека">IT ипотека</option>
                         <option value="Семейная ипотека">Семейная ипотека</option>
                         <option value="Обычная ипотека">Обычная ипотека</option>
+                        <option value="Другая ипотека">Другая ипотека</option>
                         <option value="Не определился">Не определился</option>
                     </select>
                 </div>
@@ -607,7 +669,7 @@
             <form id="form6">
                 <div class="form-group">
                     <label for="name6">Имя:</label>
-                    <input type="text" id="name6" name="name6" maxlength="20">
+                    <input type="text" id="name6" name="name6" maxlength="30">
                 </div>
                 
                 <div class="form-group">
@@ -716,48 +778,53 @@
         }
 
         
-let typePriority = [];
+        let typePriority = [];
 
-function handleTypeSelection(checkbox) {
-    const value = checkbox.value;
-    const index = typePriority.indexOf(value);
+        function handleTypeSelection(checkbox) {
+            const value = checkbox.value;
+            const index = typePriority.indexOf(value);
 
-    if (checkbox.checked) {
-        if (index === -1) {
-            typePriority.push(value);
+            if (checkbox.checked) {
+                if (index === -1) {
+                    typePriority.push(value);
+                }
+            } else {
+                if (index !== -1) {
+                    typePriority.splice(index, 1);
+                }
+            }
+
+            updatePriorityLabels();
         }
-    } else {
-        if (index !== -1) {
-            typePriority.splice(index, 1);
+
+        function updatePriorityLabels() {
+            const priorityPrimary = document.getElementById("priority-primary");
+            const prioritySecondary = document.getElementById("priority-secondary");
+
+            priorityPrimary.textContent = '';
+            prioritySecondary.textContent = '';
+
+            typePriority.forEach((type, idx) => {
+                if (type === 'Первичка') {
+                    priorityPrimary.textContent = idx + 1;
+                }
+                if (type === 'Вторичка') {
+                    prioritySecondary.textContent = idx + 1;
+                }
+            });
         }
-    }
 
-    updatePriorityLabels();
-}
-
-function updatePriorityLabels() {
-    const priorityPrimary = document.getElementById("priority-primary");
-    const prioritySecondary = document.getElementById("priority-secondary");
-
-    priorityPrimary.textContent = '';
-    prioritySecondary.textContent = '';
-
-    typePriority.forEach((type, idx) => {
-        if (type === 'Первичка') {
-            priorityPrimary.textContent = idx + 1;
+        function getTypeOutputText() {
+            if (typePriority.length === 0) return '';
+            if (typePriority.length === 1) return `Тип: ${typePriority[0]}\n`;
+            return `Тип: ${typePriority[0]} (также рассматривает ${typePriority[1].toLowerCase()})\n`;
         }
-        if (type === 'Вторичка') {
-            prioritySecondary.textContent = idx + 1;
+
+        // Функция для получения единицы измерения суммы
+        function getAmountUnit(formId, fieldName) {
+            const unitField = document.querySelector(`#${formId} input[name="${fieldName}-unit"]:checked`);
+            return unitField ? unitField.value : '';
         }
-    });
-}
-
-function getTypeOutputText() {
-    if (typePriority.length === 0) return '';
-    if (typePriority.length === 1) return `Тип: ${typePriority[0]}\n`;
-    return `Тип: ${typePriority[0]} (также рассматривает ${typePriority[1].toLowerCase()})\n`;
-}
-
 
         // Копирование данных из формы (кроме формы жалобы)
         function copyFormData(formId) {
@@ -778,7 +845,7 @@ function getTypeOutputText() {
             
             // Обрабатываем все элементы формы
             Array.from(form.elements).forEach(element => {
-                if (element.name && element.name !== 'on-status') {
+                if (element.name && element.name !== 'on-status' && !element.name.endsWith('-unit')) {
                     // Обработка чекбоксов бюджета
                     if (element.name === 'budget-composition[]') {
                         if (element.checked) {
@@ -796,6 +863,20 @@ function getTypeOutputText() {
                             result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
                         }
                     }
+                                                            // Обработка полей площади - добавляем "кв.м"
+                    else if ((element.name === 'area' || element.name === 'area3') && element.value && element.value.trim() !== '') {
+                        result += `${getFieldLabel(formId, element.name)}: ${element.value} кв.м\n`;
+                    }
+                    // Обработка бюджета - добавляем выбранную единицу (тыс/млн)
+                    else if (element.name === 'budget' && element.value && element.value.trim() !== '') {
+                        const unit = getAmountUnit(formId, 'budget');
+                        result += `${getFieldLabel(formId, element.name)}: ${element.value} ${unit}\n`;
+                    }
+                    // Обработка цены - добавляем выбранную единицу (тыс/млн)
+                    else if (element.name === 'price3' && element.value && element.value.trim() !== '') {
+                        const unit = getAmountUnit(formId, 'price');
+                        result += `${getFieldLabel(formId, element.name)}: ${element.value} ${unit}\n`;
+                    }
                     // Обработка остальных полей
                     else if (element.value && element.value.trim() !== '') {
                         result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
@@ -803,15 +884,13 @@ function getTypeOutputText() {
                 }
             });
             
-            // Убираем дублирование строки бюджета
-            
             // Переместим "Тип" после строки "Покупка/Аренда"
             if (insertAfter) {
                 result = result.replace(/(Покупка\/Аренда: .+\n)/, `$1${insertAfter}`);
             }
 
+            // Убираем дублирование строки бюджета
             result = result.replace(/(Бюджет состоит из: .+)\nБюджет состоит из: (.+)/g, 'Бюджет состоит из: $1 + $2');
-    
             
             if (result) {
                 navigator.clipboard.writeText(result.trim())
@@ -830,7 +909,9 @@ function getTypeOutputText() {
             const agentOffice = document.getElementById('agent-office6').value || 'не указано';
             const address = document.getElementById('address6').value || 'не указано';
             
-            const complaintText = `Имя клиента: ${name}
+            const complaintText = `Тема: Претензия
+
+Имя клиента: ${name}
 Телефон клиента: ${phone}
 ФИО агента: ${agentName}
 Офис агента: ${agentOffice}
