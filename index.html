@@ -114,6 +114,13 @@
             resize: vertical;
         }
         
+        /* Приоритетный маркер */
+        .priority-label {
+            font-weight: bold;
+            margin-left: 5px;
+            color: #e67e22;
+        }
+
         /* Стили для радио-кнопок с подсветкой выбранного */
         .radio-group {
             margin-top: 8px;
@@ -378,14 +385,14 @@
                 
                 <div class="form-group">
                     <label>Тип:</label>
-                    <div class="radio-group">
+                    <div class="radio-group" id="type-priority-group">
                         <div class="radio-option">
-                            <input type="radio" id="primary" name="Тип" value="Первичка" checked>
-                            <label for="primary" class="radio-label">Первичка</label>
+                            <input type="checkbox" id="primary" value="Первичка" onclick="handleTypeSelection(this)">
+                            <label for="primary" class="radio-label">Первичка <span class="priority-label" id="priority-primary"></span></label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="secondary" name="Тип" value="Вторичка">
-                            <label for="secondary" class="radio-label">Вторичка</label>
+                            <input type="checkbox" id="secondary" value="Вторичка" onclick="handleTypeSelection(this)">
+                            <label for="secondary" class="radio-label">Вторичка <span class="priority-label" id="priority-secondary"></span></label>
                         </div>
                     </div>
                 </div>
@@ -708,10 +715,61 @@
             }
         }
 
+        
+let typePriority = [];
+
+function handleTypeSelection(checkbox) {
+    const value = checkbox.value;
+    const index = typePriority.indexOf(value);
+
+    if (checkbox.checked) {
+        if (index === -1) {
+            typePriority.push(value);
+        }
+    } else {
+        if (index !== -1) {
+            typePriority.splice(index, 1);
+        }
+    }
+
+    updatePriorityLabels();
+}
+
+function updatePriorityLabels() {
+    const priorityPrimary = document.getElementById("priority-primary");
+    const prioritySecondary = document.getElementById("priority-secondary");
+
+    priorityPrimary.textContent = '';
+    prioritySecondary.textContent = '';
+
+    typePriority.forEach((type, idx) => {
+        if (type === 'Первичка') {
+            priorityPrimary.textContent = idx + 1;
+        }
+        if (type === 'Вторичка') {
+            prioritySecondary.textContent = idx + 1;
+        }
+    });
+}
+
+function getTypeOutputText() {
+    if (typePriority.length === 0) return '';
+    if (typePriority.length === 1) return `Тип: ${typePriority[0]}\n`;
+    return `Тип: ${typePriority[0]} (также рассматривает ${typePriority[1].toLowerCase()})\n`;
+}
+
+
         // Копирование данных из формы (кроме формы жалобы)
         function copyFormData(formId) {
             const form = document.getElementById(formId);
             let result = '';
+            
+            let insertAfter = '';
+            if (formId === 'form2') {
+                const typeText = getTypeOutputText();
+                insertAfter = typeText;
+            }
+    
             
             // Добавляем специальный текст для веб-заявки
             if (formId === 'form4') {
@@ -746,7 +804,14 @@
             });
             
             // Убираем дублирование строки бюджета
+            
+            // Переместим "Тип" после строки "Покупка/Аренда"
+            if (insertAfter) {
+                result = result.replace(/(Покупка\/Аренда: .+\n)/, `$1${insertAfter}`);
+            }
+
             result = result.replace(/(Бюджет состоит из: .+)\nБюджет состоит из: (.+)/g, 'Бюджет состоит из: $1 + $2');
+    
             
             if (result) {
                 navigator.clipboard.writeText(result.trim())
