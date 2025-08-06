@@ -364,12 +364,16 @@
                 </div>
                 
                 <div id="maps-call-fields" class="conditional-field">
-                    <label for="maps-city">Город:</label>
-                    <input type="text" id="maps-city" name="maps-city" maxlength="30">
-                    
-                    <label for="office-address">Адрес офиса:</label>
-                    <input type="text" id="office-address" name="office-address" maxlength="30">
-                </div>
+    <label for="maps-city">Город:</label>
+    <input type="text" id="maps-city" name="maps-city" maxlength="30">
+    
+    <label for="office-address">Адрес офиса:</label>
+    <input type="text" id="office-address" name="office-address" maxlength="30">
+
+    <!-- Добавленное поле -->
+    <label for="maps-nearby">Рядом:</label>
+    <input type="text" id="maps-nearby" name="maps-nearby" maxlength="50">
+</div>
                 
                 <div id="other-sources-fields" class="conditional-field">
                     <label for="other-city">Город:</label>
@@ -519,12 +523,16 @@
                 </div>
                 
                 <div id="maps-call-fields3" class="conditional-field">
-                    <label for="maps-city3">Город:</label>
-                    <input type="text" id="maps-city3" name="maps-city3" maxlength="30">
-                    
-                    <label for="office-address3">Адрес офиса:</label>
-                    <input type="text" id="office-address3" name="office-address3" maxlength="30">
-                </div>
+    <label for="maps-city3">Город:</label>
+    <input type="text" id="maps-city3" name="maps-city3" maxlength="30">
+    
+    <label for="office-address3">Адрес офиса:</label>
+    <input type="text" id="office-address3" name="office-address3" maxlength="30">
+
+    <!-- Добавленное поле -->
+    <label for="maps-nearby3">Рядом:</label>
+    <input type="text" id="maps-nearby3" name="maps-nearby3" maxlength="50">
+</div>
                 
                 <div id="other-sources-fields3" class="conditional-field">
                     <label for="other-city3">Город:</label>
@@ -826,16 +834,87 @@
             return unitField ? unitField.value : '';
         }
 
-        // Копирование данных из формы (кроме формы жалобы)
         function copyFormData(formId) {
-            const form = document.getElementById(formId);
-            let result = '';
+    const form = document.getElementById(formId);
+    let result = '';
+    
+    // Специальный текст для веб-заявки
+    if (formId === 'form4') {
+        result = "Источник: Веб заявка - ипотека\n";
+    }
+
+    // Собираем основные поля
+    Array.from(form.elements).forEach(element => {
+        if (element.name && 
+            !['rooms', 'area', 'floor', 'budget', 'budget-unit', 'budget-composition[]'].includes(element.name) &&
+            element.name !== 'on-status') {
             
-            let insertAfter = '';
-            if (formId === 'form2') {
-                const typeText = getTypeOutputText();
-                insertAfter = typeText;
+            // Обработка источника и других стандартных полей
+            if (element.type === 'checkbox' || element.type === 'radio') {
+                if (element.checked) {
+                    result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
+                }
+            } 
+            else if (element.value && element.value.trim() !== '') {
+                result += `${getFieldLabel(formId, element.name)}: ${element.value}\n`;
             }
+        }
+    });
+
+    // Формируем строку с характеристиками
+    let typeLine = '';
+    
+    // Тип недвижимости (первичка/вторичка)
+    if (formId === 'form2') {
+        const typeText = getTypeOutputText().replace('Тип: ', '').replace('\n', '');
+        if (typeText) typeLine += typeText;
+    }
+
+    // Площадь
+    const area = form.querySelector('[name="area"], [name="area3"]')?.value;
+    if (area) typeLine += typeLine ? `, ${area} кв.м` : `${area} кв.м`;
+
+    // Этаж
+    const floor = form.querySelector('[name="floor"], [name="floor3"]')?.value;
+    if (floor) typeLine += typeLine ? `, ${floor} этаж` : `${floor} этаж`;
+
+    // Комнаты
+    const rooms = form.querySelector('[name="rooms"], [name="rooms3"]')?.value;
+    if (rooms) typeLine += typeLine ? `, комнат ${rooms}` : `комнат ${rooms}`;
+
+    // Бюджет/цена
+    const budget = form.querySelector('[name="budget"], [name="price3"]')?.value;
+    if (budget) {
+        const unit = formId === 'form2' ? 
+            getAmountUnit(formId, 'budget') : 
+            getAmountUnit(formId, 'price');
+        typeLine += typeLine ? `, ${budget} ${unit}` : ` ${budget} ${unit}`;
+    }
+
+    // Добавляем строку с характеристиками
+    if (typeLine) {
+        result = result.replace(/Тип: .+\n/, ''); // Удаляем старую строку типа
+        result += `Тип: ${typeLine}\n`;
+    }
+
+    // Обрабатываем состав бюджета
+    const budgetComposition = [];
+    form.querySelectorAll('[name="budget-composition[]"]:checked').forEach(cb => {
+        budgetComposition.push(cb.value);
+    });
+    if (budgetComposition.length > 0) {
+        result += `Бюджет состоит из: ${budgetComposition.join(' + ')}\n`;
+    }
+
+    // Копируем в буфер обмена
+    if (result) {
+        navigator.clipboard.writeText(result.trim())
+            .then(() => alert('Данные скопированы в буфер обмена!'))
+            .catch(err => console.error('Ошибка копирования: ', err));
+    } else {
+        alert('Нет данных для копирования!');
+    
+}
     
             
             // Добавляем специальный текст для веб-заявки
