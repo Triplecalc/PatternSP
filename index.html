@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сценарии С+</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            padding: 0 15px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #495057;
+            background: none;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 25px;
+            background-color: white;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .hint {
+            font-size: 14px;
+            color: #6c757d;
+            margin: 6px 0;
+            font-style: italic;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            max-width: 400px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+            max-width: 500px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .radio-option, .checkbox-option {
+            position: relative;
+        }
+
+        .radio-option input, .checkbox-option input {
+            display: none;
+        }
+
+        .radio-label, .checkbox-label {
+            padding: 8px 16px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s;
+            font-weight: normal;
+            margin: 0;
+            display: inline-block;
+        }
+
+        .radio-option input:checked + .radio-label {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .checkbox-option input:checked + .checkbox-label {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .radio-label:hover, .checkbox-label:hover {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
+        .radio-option input:checked + .radio-label:hover,
+        .checkbox-option input:checked + .checkbox-label:hover {
+            background-color: #2980b9;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .conditional-field {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .budget-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .budget-group input {
+            max-width: 120px;
+        }
+
+        .budget-group select {
+            max-width: 100px;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(100%); }
+            15% { opacity: 1; transform: translateX(0); }
+            85% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(100%); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            z-index: 1000;
+            font-weight: 500;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: fadeInOut 4s forwards;
+        }
+
+        .notification.success {
+            background: #28a745;
+            color: white;
+        }
+
+        .notification.error {
+            background: #dc3545;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .tab {
+                border-bottom: 1px solid #dee2e6;
+                border-right: none;
+            }
+            .tab.active {
+                border-bottom-color: #3498db;
+                border-right: none;
+            }
+            input, select, textarea {
+                max-width: 100%;
+            }
+            .radio-group, .checkbox-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Color highlighting for key words */
+        .highlight-role {
+            color: #dc143c;
+            font-weight: bold;
+        }
+
+        .highlight-name {
+            color: #b22222;
+            font-weight: bold;
+        }
+
+        .highlight-operation {
+            color: #ff4500;
+            font-weight: bold;
+        }
+
+        .highlight-property {
+            color: #cd5c5c;
+            font-weight: bold;
+        }
+
+        .highlight-address {
+            color: #ff6347;
+            font-weight: bold;
+        }
+
+        .highlight-price {
+            color: #ff1493;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="tab1">Покупка/аренда конкретного ОН</div>
+            <div class="tab" data-tab="tab2">Покупка/аренда. Подбор</div>
+            <div class="tab" data-tab="tab3">Продать/сдать. Лид на офис</div>
+            <div class="tab" data-tab="tab4">Веб заявка</div>
+            <div class="tab" data-tab="tab6">Жалоба - снять ОН</div>
+        </div>
+
+        <!-- Tab 1: Покупка/аренда конкретного ОН -->
+        <div id="tab1" class="tab-content active">
+            <form id="form1">
+                <div class="hint">Здравствуйте, меня зовут "Имя оператора", специалист контакт-центра Самолет Плюс, чем могу Вам помочь?</div>
+                
+                <div class="form-group">
+                    <label for="source1">Источник:</label>
+                    <input type="text" id="source1" name="source1" placeholder="Город+Улица">
+                </div>
+                
+                <div class="hint">Как я могу к Вам обращаться?</div>
+                <div class="form-group">
+                    <label for="name1">Имя:</label>
+                    <input type="text" id="name1" name="name1" oninput="updateGreeting('name1','greeting1')">
+                    <div id="greeting1" class="hint"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Роль:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent1" name="role1" value="Агент" checked onchange="updateDynamicTexts1()">
+                            <label for="agent1" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client1" name="role1" value="Клиент" onchange="updateDynamicTexts1()">
+                            <label for="client1" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hint">Уточните, пожалуйста, полный адрес объекта из объявления или артикул. Он находится: в начале описания или под описанием на странице объявления;</div>
+                <div class="form-group">
+                    <label for="address1">Адрес ОН:</label>
+                    <input type="text" id="address1" name="address1">
+                </div>
+                
+                <div class="hint">Уточните, пожалуйста, стоимость объекта</div>
+                <div class="form-group">
+                    <label for="price1">Стоимость объекта:</label>
+                    <div class="budget-group">
+                        <input type="text" id="price1" name="price1">
+                        <select id="price-unit1" name="price-unit1">
+                            <option value="тыс">тыс</option>
+                            <option value="млн">млн</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>ОН:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="found1" name="on-status1" value="Найден" checked onchange="toggleON1()">
+                            <label for="found1" class="radio-label">Найден</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="not-found1" name="on-status1" value="Не найден" onchange="toggleON1()">
+                            <label for="not-found1" class="radio-label">Не найден</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="found-extra1" class="conditional-field">
+                    <div id="agent-name-display1" class="hint">Объектом занимается "имя агента". Сейчас я вас с ним/ней соединю, и передам ваши контакты, а вам придет сообщение с номером телефона агента.</div>
+                    <div class="hint">Оставайтесь, пожалуйста, на линии, соединяю.</div>
+                    <div id="agent-greeting1" class="hint">Здравствуйте! На линии <span id="role-text1" class="highlight-role">клиент</span> <span id="name-text1" class="highlight-name">ИМЯ</span>.</div>
+                    <div class="hint">Интересует <span class="highlight-operation">покупка/аренда</span> <span class="highlight-property">квартиры/дома/участка</span>: <span class="highlight-address">АДРЕС_ОБЪЕКТА</span>. <span class="highlight-price">Цена объекта</span> Соединяю.»</div>
+                </div>
+                
+                <div id="not-found-extra1" class="conditional-field">
+                    <div class="hint">Уточните, вас первичка или вторичка интересует?</div>
+                    <div class="hint">Уточните, пожалуйста, ФИО агента или ответственного из объявления.</div>
+                    <div class="form-group">
+                        <label for="agent-name1">ФИО агента:</label>
+                        <input type="text" id="agent-name1" name="agent-name1" oninput="toggleAgentResponse1()">
+                    </div>
+                    <div id="agent-found-response1" class="conditional-field">
+                        <div class="hint">Оставайтесь, пожалуйста, на линии, соединяю.</div>
+                        <div id="agent-greeting-response1" class="hint">Здравствуйте! На линии <span id="role-text-response1" class="highlight-role">клиент</span> <span id="name-text-response1" class="highlight-name">ИМЯ</span>.</div>
+                        <div class="hint">Интересует <span class="highlight-operation">покупка/аренда</span> <span class="highlight-property">квартиры/дома/участка</span>: <span class="highlight-address">АДРЕС_ОБЪЕКТА</span>. <span class="highlight-price">Цена объекта</span> Соединяю.»</div>
+                    </div>
+                    <div id="agent-not-found-response1" class="conditional-field">
+                        <div class="hint">Передам ваши контакты агенту, чтобы вы смогли связаться напрямую. А вам придёт сообщение с номером телефона агента.</div>
+                        <div class="hint">Ожидайте звонка, всего доброго, до свидания!</div>
+                    </div>
+                </div>
+                
+                <button type="button" onclick="copyFormData('form1')">Копировать</button>
+            </form>
+        </div>
+
+        <!-- Tab 2: Покупка/аренда. Подбор -->
+        <div id="tab2" class="tab-content">
+            <form id="form2">
+                <div class="hint">Здравствуйте, меня зовут "Имя оператора", специалист контакт-центра Самолет Плюс, чем могу Вам помочь?</div>
+                
+                <div class="form-group">
+                    <label for="source2">Источник:</label>
+                    <select id="source2" name="source2" onchange="showConditionalFields2()">
+                        <option value="">Выберите источник</option>
+                        <option value="Баннер">Баннер</option>
+                        <option value="Пенза баннер">Пенза баннер</option>
+                        <option value="Город+Улица">Город+Улица</option>
+                        <option value="Звонок с карт">Звонок с карт</option>
+                        <option value="Др.источники">Др.источники</option>
+                    </select>
+                </div>
+                
+                <div id="banner-field2" class="conditional-field">
+                    <div class="hint">Что это за баннер?</div>
+                    <div class="form-group">
+                        <label for="banner-info2">Адрес баннера:</label>
+                        <input type="text" id="banner-info2" name="banner-info2">
+                    </div>
+                </div>
+                
+                <div id="city-street-field2" class="conditional-field">
+                    <div class="form-group">
+                        <label for="city-street2">Город+Улица:</label>
+                        <input type="text" id="city-street2" name="city-street2">
+                    </div>
+                </div>
+                
+                <div id="penza-banner-field2" class="conditional-field">
+                    <div class="hint">Подскажите, по какому адресу вы видели наше объявление?</div>
+                    <div class="form-group">
+                        <label for="penza-address2">Адрес баннера:</label>
+                        <input type="text" id="penza-address2" name="penza-address2">
+                    </div>
+                </div>
+                
+                <div id="maps-call-fields2" class="conditional-field">
+                    <div class="hint">*Имя клиента*, подскажите, в каком городе Вас интересует подбор?</div>
+                    <div class="form-group">
+                        <label for="maps-city2">Город:</label>
+                        <input type="text" id="maps-city2" name="maps-city2">
+                    </div>
+                    <div class="hint">Назовите полный адрес офиса, который вас интересует.</div>
+                    <div class="form-group">
+                        <label for="office-address2">Адрес офиса:</label>
+                        <input type="text" id="office-address2" name="office-address2">
+                    </div>
+                    <div class="hint">На какой улице вы живёте? Сейчас найду ближайшие к ней офисы</div>
+                    <div class="form-group">
+                        <label for="maps-nearby2">Рядом:</label>
+                        <input type="text" id="maps-nearby2" name="maps-nearby2">
+                    </div>
+                </div>
+                
+                <div id="other-sources-fields2" class="conditional-field">
+                    <div class="hint">Подскажите, в каком городе вас интересует подбор?</div>
+                    <div class="form-group">
+                        <label for="other-city2">Город:</label>
+                        <input type="text" id="other-city2" name="other-city2">
+                    </div>
+                    <div class="hint">Назовите полный адрес офиса, который вас интересует.</div>
+                    <div class="form-group">
+                        <label for="other-office-address2">Адрес офиса:</label>
+                        <input type="text" id="other-office-address2" name="other-office-address2">
+                    </div>
+                    <div class="hint">На какой улице вы живёте? Сейчас найду ближайшие к ней офисы</div>
+                    <div class="form-group">
+                        <label for="other-nearby2">Рядом:</label>
+                        <input type="text" id="other-nearby2" name="other-nearby2">
+                    </div>
+                </div>
+                
+                <div class="hint">Как я могу к Вам обращаться?</div>
+                <div class="form-group">
+                    <label for="name2">Имя:</label>
+                    <input type="text" id="name2" name="name2" oninput="updateGreeting('name2','greeting2')">
+                    <div id="greeting2" class="hint"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Роль:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent2" name="role2" value="Агент" checked>
+                            <label for="agent2" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client2" name="role2" value="Клиент">
+                            <label for="client2" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Покупка/аренда:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="purchase2" name="operation2" value="Покупка" checked onchange="toggleTypeAndBudget2()">
+                            <label for="purchase2" class="radio-label">Покупка</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="rent2" name="operation2" value="Аренда" onchange="toggleTypeAndBudget2()">
+                            <label for="rent2" class="radio-label">Аренда</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hint">Уточните адрес подбора</div>
+                <div class="form-group">
+                    <label for="district2">Район подбора:</label>
+                    <input type="text" id="district2" name="district2">
+                </div>
+                
+                <div id="type-block2" class="form-group">
+                    <div class="hint">Уточните, вас первичка или вторичка интересует?</div>
+                    <label>Тип:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="primary2" name="type2" value="Первичка" onchange="updateTypeOrder2()">
+                            <label for="primary2" class="checkbox-label"><span id="primary-number2"></span>Первичка</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="secondary2" name="type2" value="Вторичка" onchange="updateTypeOrder2()">
+                            <label for="secondary2" class="checkbox-label"><span id="secondary-number2"></span>Вторичка</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hint">Уточните тип недвижемости. Сколько комнат, площадь и этаж вас интересует?</div>
+                <div class="form-group">
+                    <label for="rooms2">Кол.комнат:</label>
+                    <input type="text" id="rooms2" name="rooms2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="area2">Площадь:</label>
+                    <input type="text" id="area2" name="area2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="floor2">Этаж:</label>
+                    <input type="text" id="floor2" name="floor2">
+                    <div class="checkbox-group" style="margin-top: 8px;">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="not-first2" name="floor-options2" value="Не первый">
+                            <label for="not-first2" class="checkbox-label">Не первый</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="not-last2" name="floor-options2" value="Не последний">
+                            <label for="not-last2" class="checkbox-label">Не последний</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hint">Какой у вас бюджет на покупку?</div>
+                <div class="form-group">
+                    <label for="budget2">Бюджет:</label>
+                    <div class="budget-group">
+                        <input type="text" id="budget2" name="budget2">
+                        <select id="budget-unit2" name="budget-unit2">
+                            <option value="тыс">тыс</option>
+                            <option value="млн">млн</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="budget-comp-block2" class="form-group">
+                    <div class="hint">Из чего состоит ваш бюджет?</div>
+                    <label>Бюджет состоит из:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="mortgage2" name="budget-comp2" value="Ипотека">
+                            <label for="mortgage2" class="checkbox-label">Ипотека</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="matcap2" name="budget-comp2" value="Мат.кап">
+                            <label for="matcap2" class="checkbox-label">Мат.кап</label>
+                        </div>
+                        <div class="checkbox-option">
+                            <input type="checkbox" id="cash2" name="budget-comp2" value="Наличка">
+                            <label for="cash2" class="checkbox-label">Наличка</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additional2">Дополнительные пожелания:</label>
+                    <textarea id="additional2" name="additional2"></textarea>
+                </div>
+                
+                <div class="hint">Передам ваши контакты агенту, чтобы вы смогли связаться напрямую. А вам придёт сообщение с его номером телефона.
+
+Ожидайте звонка, всего доброго, до свидания!</div>
+                
+                <button type="button" onclick="copyFormData('form2')">Копировать</button>
+            </form>
+        </div>
+
+        <!-- Tab 3: Продать/сдать. Лид на офис -->
+        <div id="tab3" class="tab-content">
+            <form id="form3">
+                <div class="hint">Здравствуйте, меня зовут "Имя оператора", специалист контакт-центра Самолет Плюс, чем могу Вам помочь?</div>
+                
+                <div class="form-group">
+                    <label for="source3">Источник:</label>
+                    <select id="source3" name="source3" onchange="showConditionalFields3()">
+                        <option value="">Выберите источник</option>
+                        <option value="Баннер">Баннер</option>
+                        <option value="Пенза баннер">Пенза баннер</option>
+                        <option value="Город+Улица">Город+Улица</option>
+                        <option value="Звонок с карт">Звонок с карт</option>
+                        <option value="Др.источники">Др.источники</option>
+                    </select>
+                </div>
+                
+                <div id="banner-field3" class="conditional-field">
+                    <div class="hint">Что это за баннер?</div>
+                    <div class="form-group">
+                        <label for="banner-info3">Адрес баннера:</label>
+                        <input type="text" id="banner-info3" name="banner-info3">
+                    </div>
+                </div>
+                
+                <div id="city-street-field3" class="conditional-field">
+                    <div class="form-group">
+                        <label for="city-street3">Город+Улица:</label>
+                        <input type="text" id="city-street3" name="city-street3">
+                    </div>
+                </div>
+                
+                <div id="penza-banner-field3" class="conditional-field">
+                    <div class="hint">Подскажите, по какому адресу вы видели наше объявление?</div>
+                    <div class="form-group">
+                        <label for="penza-address3">Адрес баннера:</label>
+                        <input type="text" id="penza-address3" name="penza-address3">
+                    </div>
+                </div>
+                
+                <div id="maps-call-fields3" class="conditional-field">
+                    <div class="hint">Уточните, в каком городе вы хотите продать/сдать недвижемость?</div>
+                    <div class="form-group">
+                        <label for="maps-city3">Город:</label>
+                        <input type="text" id="maps-city3" name="maps-city3">
+                    </div>
+                    <div class="hint">Назовите полный адрес офиса, который вас интересует.</div>
+                    <div class="form-group">
+                        <label for="office-address3">Адрес офиса:</label>
+                        <input type="text" id="office-address3" name="office-address3">
+                    </div>
+                    <div class="hint">На какой улице вы живёте? Сейчас найду ближайшие к ней офисы</div>
+                    <div class="form-group">
+                        <label for="maps-nearby3">Рядом:</label>
+                        <input type="text" id="maps-nearby3" name="maps-nearby3">
+                    </div>
+                </div>
+                
+                <div id="other-sources-fields3" class="conditional-field">
+                    <div class="hint">Уточните, в каком городе вы хотите продать/сдать недвижимость?</div>
+                    <div class="form-group">
+                        <label for="other-city3">Город:</label>
+                        <input type="text" id="other-city3" name="other-city3">
+                    </div>
+                    <div class="hint">Назовите полный адрес офиса, который вас интересует.</div>
+                    <div class="form-group">
+                        <label for="other-office-address3">Адрес офиса:</label>
+                        <input type="text" id="other-office-address3" name="other-office-address3">
+                    </div>
+                    <div class="hint">На какой улице вы живёте? Сейчас найду ближайшие к ней офисы</div>
+                    <div class="form-group">
+                        <label for="other-nearby3">Рядом:</label>
+                        <input type="text" id="other-nearby3" name="other-nearby3">
+                    </div>
+                </div>
+                
+                <div class="hint">Как я могу к Вам обращаться?</div>
+                <div class="form-group">
+                    <label for="name3">Имя:</label>
+                    <input type="text" id="name3" name="name3" oninput="updateGreeting('name3','greeting3')">
+                    <div id="greeting3" class="hint"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Роль:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent3" name="role3" value="Агент" checked>
+                            <label for="agent3" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client3" name="role3" value="Клиент">
+                            <label for="client3" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Продажа/Сдача:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="sell3" name="operation3" value="Продажа" checked>
+                            <label for="sell3" class="radio-label">Продажа</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="rent-out3" name="operation3" value="Сдача">
+                            <label for="rent-out3" class="radio-label">Сдача</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hint">Уточните адрес объекта, который вы хотите продать/сдать?</div>
+                <div class="form-group">
+                    <label for="address3">Адрес объекта:</label>
+                    <input type="text" id="address3" name="address3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="rooms3">Кол.комнат:</label>
+                    <input type="text" id="rooms3" name="rooms3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="area3">Площадь:</label>
+                    <input type="text" id="area3" name="area3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="floor3">Этаж:</label>
+                    <input type="text" id="floor3" name="floor3">
+                </div>
+                
+                <div class="form-group">
+                    <label for="price3">Продает за:</label>
+                    <div class="budget-group">
+                        <input type="text" id="price3" name="price3">
+                        <select id="price-unit3" name="price-unit3">
+                            <option value="тыс">тыс</option>
+                            <option value="млн">млн</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additional3">Дополнительные пожелания:</label>
+                    <textarea id="additional3" name="additional3"></textarea>
+                </div>
+                
+                <div class="hint">Передам ваши контакты агенту, чтобы вы смогли связаться напрямую. А вам придёт сообщение с его номером телефона.
+
+Ожидайте звонка, всего доброго, до свидания!</div>
+                <button type="button" onclick="copyFormData('form3')">Копировать</button>
+            </form>
+        </div>
+
+        <!-- Tab 4: Веб заявка -->
+        <div id="tab4" class="tab-content">
+            <form id="form4">
+                <div class="hint">Здравствуйте, меня зовут *Имя оператора*, специалист контакт-центра Самолет Плюс. Вы оставляли заявку на сайте по программе ипотека, верно?</div>
+                
+                <div class="hint">Как я могу к Вам обращаться?</div>
+                <div class="form-group">
+                    <label for="name4">Имя:</label>
+                    <input type="text" id="name4" name="name4" oninput="updateGreeting('name4','greeting4')">
+                    <div id="greeting4" class="hint"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Роль:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="agent4" name="role4" value="Агент" checked>
+                            <label for="agent4" class="radio-label">Агент</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="client4" name="role4" value="Клиент">
+                            <label for="client4" class="radio-label">Клиент</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mortgage-type4">Тип ипотеки:</label>
+                    <div id="mortgage-hint4" class="hint"></div>
+                    <select id="mortgage-type4" name="mortgage-type4">
+                        <option value="">Выберите тип</option>
+                        <option value="IT ипотека">IT ипотека</option>
+                        <option value="Семейная ипотека">Семейная ипотека</option>
+                        <option value="Стандартная ипотека">Обычная ипотека</option>
+                        <option value="Другая ипотека">Другая ипотека</option>
+                        <option value="Не определился">Не определился</option>
+                    </select>
+                </div>
+                
+                <div class="hint">В каком городе вас интересует услуга?</div>
+                <div class="form-group">
+                    <label for="city4">Город:</label>
+                    <input type="text" id="city4" name="city4">
+                </div>
+                
+                <div class="hint">На какой улице вы живете? Сейчас найду
+ближайшие к ней офисы.</div>
+                <div class="form-group">
+                    <label for="street-metro4">Улица/Метро:</label>
+                    <input type="text" id="street-metro4" name="street-metro4">
+                </div>
+                
+                <div class="hint">«ИМЯ клиента заявка передана менеджеру, также передал/а ему ваши контакты. Менеджер свяжется с Вами в ближайшее время. Ожидайте звонка, всего доброго, до свидания!</div>
+                <button type="button" onclick="copyFormData('form4')">Копировать</button>
+            </form>
+        </div>
+
+        <!-- Tab 6: Жалоба - снять ОН -->
+        <div id="tab6" class="tab-content">
+            <form id="form6">
+                <div class="hint">Здравствуйте, меня зовут "Имя оператора", специалист контакт-центра Самолет Плюс, чем могу Вам помочь?</div>
+                
+                <div class="hint">Как я могу к Вам обращаться?</div>
+                <div class="form-group">
+                    <label for="name6">Имя:</label>
+                    <input type="text" id="name6" name="name6">
+                </div>
+                
+                <div class="hint">Уточните, вы являетесь собственником объекта?</div>
+                <div class="form-group">
+                    <label>Собственник:</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="owner-yes6" name="owner6" value="Да" onchange="toggleOwnerFields6()">
+                            <label for="owner-yes6" class="radio-label">Да</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="owner-no6" name="owner6" value="Нет" onchange="toggleOwnerFields6()">
+                            <label for="owner-no6" class="radio-label">Нет</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="non-owner-message6" style="display: none; color: #dc3545; font-weight: bold; margin: 15px 0; padding: 15px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 6px;">
+                    Снять ОН может только собственник. Ему необходимо самостоятельно связаться с агентом. Всего доброго, до свидания!
+                </div>
+                
+                <div id="main-form-fields6">
+                    <div class="form-group">
+                        <label for="agent-fio6">ФИО агента:</label>
+                        <input type="text" id="agent-fio6" name="agent-fio6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="office6">Офис агента:</label>
+                        <input type="text" id="office6" name="office6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address6">Адрес ОН:</label>
+                        <input type="text" id="address6" name="address6">
+                        <div class="hint">Укажите полный адрес ОН, который нужно снять: город, улица, дом, квартира (если есть)</div>
+                    </div>
+                    
+                    <div class="hint">Подробности жалобы уточняются в ходе разговора с клиентом.
+                    В звонке клиенту нужно предложить соединение с агентом. Если против - не настаиваем. Если нет, тогда пробуем соединить и все равно оформляем жалобу.</div>
+                    
+                    <div class="hint">Я передам информацию в службу контроля качества. С Вами свяжутся в ближайшее время.
+Спасибо за обращение! Всего доброго, до свидания!</div>
+                </div>
+                
+                <button type="button" onclick="copyFormData('form6')">Копировать</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Greeting update function
+        function updateGreeting(inputId, hintId) {
+            const val = document.getElementById(inputId).value.trim();
+            const greetingText = val ? `${val}, очень приятно! Подскажите, Вы риелтор или для себя подбираете?` : '';
+            document.getElementById(hintId).textContent = greetingText;
+            
+            // Update dynamic role and name texts for Tab 1
+            if (inputId === 'name1') {
+                updateDynamicTexts1();
+            }
+            
+            // Update mortgage hint for Tab 4
+            if (inputId === 'name4') {
+                updateMortgageHint4(val);
+            }
+        }
+
+        // Update dynamic texts in Tab 1 greeting messages
+        function updateDynamicTexts1() {
+            const name = document.getElementById('name1').value.trim() || 'ИМЯ';
+            const roleRadio = document.querySelector('input[name="role1"]:checked');
+            const role = roleRadio ? roleRadio.value.toLowerCase() : 'клиент';
+            
+            // Update main greeting
+            const nameText1 = document.getElementById('name-text1');
+            const roleText1 = document.getElementById('role-text1');
+            if (nameText1) nameText1.textContent = name;
+            if (roleText1) roleText1.textContent = role;
+            
+            // Update response greeting
+            const nameTextResponse1 = document.getElementById('name-text-response1');
+            const roleTextResponse1 = document.getElementById('role-text-response1');
+            if (nameTextResponse1) nameTextResponse1.textContent = name;
+            if (roleTextResponse1) roleTextResponse1.textContent = role;
+        }
+
+        // Update mortgage hint in Tab 4
+        function updateMortgageHint4(name) {
+            const mortgageHint = document.getElementById('mortgage-hint4');
+            if (mortgageHint && name) {
+                mortgageHint.textContent = `${name}, уточните, какая именно ипотека вас интересует?`;
+            } else if (mortgageHint) {
+                mortgageHint.textContent = '';
+            }
+        }
+
+        // Toggle owner fields in Tab 6
+        function toggleOwnerFields6() {
+            const isOwner = document.getElementById('owner-yes6')?.checked;
+            const nonOwnerMessage = document.getElementById('non-owner-message6');
+            const mainFields = document.getElementById('main-form-fields6');
+            
+            if (isOwner) {
+                if (nonOwnerMessage) nonOwnerMessage.style.display = 'none';
+                if (mainFields) mainFields.style.display = 'block';
+            } else {
+                if (nonOwnerMessage) nonOwnerMessage.style.display = 'block';
+                if (mainFields) mainFields.style.display = 'none';
+            }
+        }
+
+        // Toggle ON status for Tab 1
+        function toggleON1() {
+            const found = document.getElementById('found1').checked;
+            document.getElementById('found-extra1').style.display = found ? 'block' : 'none';
+            document.getElementById('not-found-extra1').style.display = !found ? 'block' : 'none';
+            
+            // Reset agent response when toggling
+            if (!found) {
+                toggleAgentResponse1();
+            }
+        }
+
+        // Toggle agent response in Tab 1
+        function toggleAgentResponse1() {
+            const agentName = document.getElementById('agent-name1')?.value?.trim() || '';
+            const hasAgentName = agentName.length > 0;
+            
+            const agentFoundResponse = document.getElementById('agent-found-response1');
+            const agentNotFoundResponse = document.getElementById('agent-not-found-response1');
+            
+            if (agentFoundResponse && agentNotFoundResponse) {
+                agentFoundResponse.style.display = hasAgentName ? 'block' : 'none';
+                agentNotFoundResponse.style.display = !hasAgentName ? 'block' : 'none';
+            }
+        }
+
+        // Toggle type and budget for Tab 2
+        function toggleTypeAndBudget2() {
+            const isRent = document.getElementById('rent2').checked;
+            document.getElementById('type-block2').style.display = isRent ? 'none' : 'block';
+            document.getElementById('budget-comp-block2').style.display = isRent ? 'none' : 'block';
+        }
+
+        // Update type selection order numbers
+        function updateTypeOrder2() {
+            const primaryCheckbox = document.getElementById('primary2');
+            const secondaryCheckbox = document.getElementById('secondary2');
+            const primaryNumber = document.getElementById('primary-number2');
+            const secondaryNumber = document.getElementById('secondary-number2');
+            
+            let order = 1;
+            
+            // Clear all numbers first
+            primaryNumber.textContent = '';
+            secondaryNumber.textContent = '';
+            
+            // Check which boxes are checked and assign numbers in order of checking
+            const checkedBoxes = [];
+            if (primaryCheckbox.checked) checkedBoxes.push({checkbox: primaryCheckbox, number: primaryNumber});
+            if (secondaryCheckbox.checked) checkedBoxes.push({checkbox: secondaryCheckbox, number: secondaryNumber});
+            
+            // Assign numbers based on selection order
+            checkedBoxes.forEach((item, index) => {
+                item.number.textContent = `${index + 1}. `;
+            });
+        }
+
+        // Show conditional fields for Tab 2
+        function showConditionalFields2() {
+            const source = document.getElementById('source2').value;
+            
+            // Hide all conditional fields first
+            document.getElementById('banner-field2').style.display = 'none';
+            document.getElementById('city-street-field2').style.display = 'none';
+            document.getElementById('penza-banner-field2').style.display = 'none';
+            document.getElementById('maps-call-fields2').style.display = 'none';
+            document.getElementById('other-sources-fields2').style.display = 'none';
+            
+            // Clear all conditional field values
+            document.getElementById('banner-info2').value = '';
+            document.getElementById('city-street2').value = '';
+            document.getElementById('penza-address2').value = '';
+            document.getElementById('maps-city2').value = '';
+            document.getElementById('office-address2').value = '';
+            document.getElementById('maps-nearby2').value = '';
+            document.getElementById('other-city2').value = '';
+            document.getElementById('other-office-address2').value = '';
+            document.getElementById('other-nearby2').value = '';
+            
+            // Show relevant field based on selection
+            if (source === 'Баннер') {
+                document.getElementById('banner-field2').style.display = 'block';
+            } else if (source === 'Город+Улица') {
+                document.getElementById('city-street-field2').style.display = 'block';
+            } else if (source === 'Пенза баннер') {
+                document.getElementById('penza-banner-field2').style.display = 'block';
+            } else if (source === 'Звонок с карт') {
+                document.getElementById('maps-call-fields2').style.display = 'block';
+            } else if (source === 'Др.источники') {
+                document.getElementById('other-sources-fields2').style.display = 'block';
+            }
+        }
+
+        // Show conditional fields for Tab 3
+        function showConditionalFields3() {
+            const source = document.getElementById('source3').value;
+            
+            // Hide all conditional fields first
+            document.getElementById('banner-field3').style.display = 'none';
+            document.getElementById('city-street-field3').style.display = 'none';
+            document.getElementById('penza-banner-field3').style.display = 'none';
+            document.getElementById('maps-call-fields3').style.display = 'none';
+            document.getElementById('other-sources-fields3').style.display = 'none';
+            
+            // Clear all conditional field values
+            document.getElementById('banner-info3').value = '';
+            document.getElementById('city-street3').value = '';
+            document.getElementById('penza-address3').value = '';
+            document.getElementById('maps-city3').value = '';
+            document.getElementById('office-address3').value = '';
+            document.getElementById('maps-nearby3').value = '';
+            document.getElementById('other-city3').value = '';
+            document.getElementById('other-office-address3').value = '';
+            document.getElementById('other-nearby3').value = '';
+            
+            // Show relevant field based on selection
+            if (source === 'Баннер') {
+                document.getElementById('banner-field3').style.display = 'block';
+            } else if (source === 'Город+Улица') {
+                document.getElementById('city-street-field3').style.display = 'block';
+            } else if (source === 'Пенза баннер') {
+                document.getElementById('penza-banner-field3').style.display = 'block';
+            } else if (source === 'Звонок с карт') {
+                document.getElementById('maps-call-fields3').style.display = 'block';
+            } else if (source === 'Др.источники') {
+                document.getElementById('other-sources-fields3').style.display = 'block';
+            }
+        }
+
+        // Copy form data function
+        function copyFormData(formId) {
+            const form = document.getElementById(formId);
+            
+            if (!validateForm(formId)) {
+                showNotification('Пожалуйста, заполните обязательные поля', 'error');
+                return;
+            }
+            
+            let result = [];
+            
+            // Special handling for Tab 6 (Complaint form)
+            if (formId === 'form6') {
+                // Name
+                const name = document.getElementById('name6').value.trim();
+                if (name) {
+                    result.push(`Имя: ${name}`);
+                }
+                
+                // Owner
+                const ownerRadio = document.querySelector('input[name="owner6"]:checked');
+                if (ownerRadio) {
+                    result.push(`Собственник: ${ownerRadio.value}`);
+                }
+                
+                // If not owner, just show name and owner status
+                if (ownerRadio && ownerRadio.value === 'Нет') {
+                    const textToCopy = result.join('\n');
+                    copyToClipboard(textToCopy);
+                    return;
+                }
+                
+                // Agent FIO
+                const agentFio = document.getElementById('agent-fio6').value.trim();
+                if (agentFio) {
+                    result.push(`ФИО Агента: ${agentFio}`);
+                }
+                
+                // Office
+                const office = document.getElementById('office6').value.trim();
+                if (office) {
+                    result.push(`Офис: ${office}`);
+                }
+                
+                // Address
+                const address = document.getElementById('address6').value.trim();
+                if (address) {
+                    result.push(`Адрес ОН: ${address}`);
+                }
+                
+                const textToCopy = result.join('\n');
+                copyToClipboard(textToCopy);
+                return;
+            }
+            
+            // Collect all form data first
+            const formData = collectFormData(form);
+            
+            // Build output in proper order
+            if (formData.source) {
+                result.push(formData.source);
+            }
+            
+            if (formData.name) {
+                result.push(`Имя: ${formData.name}`);
+            }
+            
+            if (formData.role) {
+                result.push(`Роль: ${formData.role}`);
+            }
+            
+            if (formData.operation) {
+                result.push(formData.operation);
+            }
+            
+            // Add type right after operation, but only if type block is visible
+            if (formData.type && formId === 'form2') {
+                const typeBlock = document.getElementById('type-block2');
+                if (typeBlock && typeBlock.style.display !== 'none') {
+                    result.push(formData.type);
+                }
+            }
+            
+            if (formData.district) {
+                result.push(`Район подбора: ${formData.district}`);
+            }
+            
+            if (formData.address) {
+                result.push(formData.address);
+            }
+            
+            if (formData.rooms) {
+                result.push(`Кол.комнат: ${formData.rooms}`);
+            }
+            
+            if (formData.area) {
+                result.push(`Площадь: ${formData.area}`);
+            }
+            
+            if (formData.floor) {
+                result.push(formData.floor);
+            }
+            
+            // Budget comes right after floor
+            if (formData.budget) {
+                result.push(formData.budget);
+            }
+            
+            if (formData.budgetComp) {
+                result.push(formData.budgetComp);
+            }
+            
+            if (formData.price) {
+                result.push(formData.price);
+            }
+            
+            // Add other fields
+            if (formData.phone) {
+                result.push(`Телефон: ${formData.phone}`);
+            }
+            
+            if (formData.agentFio) {
+                result.push(`ФИО Агента: ${formData.agentFio}`);
+            }
+            
+            if (formData.office) {
+                result.push(`Офис агента: ${formData.office}`);
+            }
+            
+            if (formData.mortgageType) {
+                result.push(`Тип ипотеки: ${formData.mortgageType}`);
+            }
+            
+            if (formData.city) {
+                result.push(`Город: ${formData.city}`);
+            }
+            
+            if (formData.streetMetro) {
+                result.push(`Улица/Метро: ${formData.streetMetro}`);
+            }
+            
+            if (formData.complaintReason) {
+                result.push(`Причина жалобы: ${formData.complaintReason}`);
+            }
+            
+            if (formData.details) {
+                result.push(`Подробности жалобы: ${formData.details}`);
+            }
+            
+            // Additional wishes always come last
+            if (formData.additional) {
+                result.push(`Дополнительные пожелания: ${formData.additional}`);
+            }
+            
+            const textToCopy = result.join('\n');
+            
+            // Copy to clipboard
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showNotification('Данные скопированы в буфер обмена!', 'success');
+                }).catch(() => {
+                    fallbackCopy(textToCopy);
+                });
+            } else {
+                fallbackCopy(textToCopy);
+            }
+        }
+        
+        // Helper function to collect all form data
+        function collectFormData(form) {
+            const data = {};
+            
+            // Source handling
+            const sourceSelect = form.querySelector('select[name*="source"]');
+            let sourceValue = '';
+            let sourceType = '';
+            
+            if (sourceSelect && sourceSelect.value) {
+                sourceType = sourceSelect.value;
+                
+                // Find the visible conditional field value
+                const conditionalFields = form.querySelectorAll('.conditional-field');
+                conditionalFields.forEach(field => {
+                    if (field.style.display !== 'none') {
+                        const input = field.querySelector('input[type="text"]');
+                        if (input && input.value.trim()) {
+                            sourceValue = input.value.trim();
+                        }
+                    }
+                });
+                
+                if (sourceValue) {
+                    data.source = `Источник: ${sourceType} (${sourceValue})`;
+                } else if (sourceType) {
+                    data.source = `Источник: ${sourceType}`;
+                }
+            } else {
+                // Handle Tab 1 source input
+                const sourceInput = form.querySelector('input[name="source1"]');
+                if (sourceInput && sourceInput.value.trim()) {
+                    data.source = `Источник: ${sourceInput.value.trim()}`;
+                }
+            }
+            
+            // Name
+            const nameInput = form.querySelector('input[name*="name"]');
+            if (nameInput && nameInput.value.trim()) {
+                data.name = nameInput.value.trim();
+            }
+            
+            // Role (from radio buttons)
+            const roleRadio = form.querySelector('input[name*="role"]:checked');
+            if (roleRadio) {
+                // For Tab 1, only include role if it's not the default "Агент"
+                if (form.id === 'form1' && roleRadio.value === 'Клиент') {
+                    data.role = roleRadio.value;
+                } else if (form.id !== 'form1') {
+                    // For other tabs, always include role
+                    data.role = roleRadio.value;
+                }
+            }
+            
+            // Operation (Покупка/аренда or Продажа/сдача)
+            const operationRadio = form.querySelector('input[name*="operation"]:checked');
+            if (operationRadio) {
+                const label = operationRadio.closest('.form-group')?.querySelector('label')?.textContent?.replace(':', '') || '';
+                data.operation = `${label}: ${operationRadio.value}`;
+            }
+            
+            // Type (checkboxes)
+            const typeCheckboxes = form.querySelectorAll('input[name*="type"]:checked');
+            if (typeCheckboxes.length > 0) {
+                const typeValues = Array.from(typeCheckboxes).map(cb => cb.value);
+                if (typeValues.length === 1) {
+                    data.type = `Тип: ${typeValues[0]}`;
+                } else if (typeValues.length > 1) {
+                    data.type = `Тип: ${typeValues[0]} (также рассматривает ${typeValues[1].toLowerCase()})`;
+                }
+            }
+            
+            // District
+            const districtInput = form.querySelector('input[name*="district"]');
+            if (districtInput && districtInput.value.trim()) {
+                data.district = districtInput.value.trim();
+            }
+            
+            // Address
+            const addressInput = form.querySelector('input[name*="address"]');
+            if (addressInput && addressInput.value.trim()) {
+                const label = getFieldLabel(addressInput);
+                data.address = `${label}: ${addressInput.value.trim()}`;
+            }
+            
+            // Rooms
+            const roomsInput = form.querySelector('input[name*="rooms"]');
+            if (roomsInput && roomsInput.value.trim()) {
+                data.rooms = roomsInput.value.trim();
+            }
+            
+            // Area
+            const areaInput = form.querySelector('input[name*="area"]');
+            if (areaInput && areaInput.value.trim()) {
+                data.area = areaInput.value.trim();
+            }
+            
+            // Floor with options
+            const floorInput = form.querySelector('input[name*="floor"]:not([type="checkbox"])');
+            if (floorInput && floorInput.value.trim()) {
+                let floorText = `Этаж: ${floorInput.value.trim()}`;
+                
+                // Check for floor options
+                const floorOptions = form.querySelectorAll('input[name*="floor-options"]:checked');
+                if (floorOptions.length > 0) {
+                    const optionValues = Array.from(floorOptions).map(opt => opt.value);
+                    floorText += ` (${optionValues.join(', ')})`;
+                }
+                
+                data.floor = floorText;
+            }
+            
+            // Budget
+            const budgetInput = form.querySelector('input[name*="budget"]:not([name*="unit"]):not([name*="comp"])');
+            const budgetUnit = form.querySelector('select[name*="budget-unit"]');
+            if (budgetInput && budgetInput.value.trim()) {
+                const unit = budgetUnit?.value || '';
+                data.budget = `Бюджет: ${budgetInput.value.trim()}${unit ? ' ' + unit : ''}`;
+            }
+            
+            // Budget components
+            const budgetCompCheckboxes = form.querySelectorAll('input[name*="budget-comp"]:checked');
+            if (budgetCompCheckboxes.length > 0) {
+                const compValues = Array.from(budgetCompCheckboxes).map(cb => cb.value);
+                data.budgetComp = `Бюджет состоит из: ${compValues.join(', ')}`;
+            }
+            
+            // Price (for Tab 1 and Tab 3)
+            const priceInput = form.querySelector('input[name*="price"]:not([name*="unit"])');
+            const priceUnit = form.querySelector('select[name*="price-unit"]');
+            if (priceInput && priceInput.value.trim()) {
+                const unit = priceUnit?.value || '';
+                const label = priceInput.id === 'price1' ? 'Стоимость объекта' : 'Продает за';
+                data.price = `${label}: ${priceInput.value.trim()}${unit ? ' ' + unit : ''}`;
+            }
+            
+            // Phone
+            const phoneInput = form.querySelector('input[type="tel"]');
+            if (phoneInput && phoneInput.value.trim()) {
+                data.phone = phoneInput.value.trim();
+            }
+            
+            // Agent FIO
+            const agentInput = form.querySelector('input[name*="agent"]');
+            if (agentInput && agentInput.value.trim()) {
+                data.agentFio = agentInput.value.trim();
+            }
+            
+            // Office
+            const officeInput = form.querySelector('input[name*="office"]');
+            if (officeInput && officeInput.value.trim()) {
+                data.office = officeInput.value.trim();
+            }
+            
+            // Mortgage type
+            const mortgageSelect = form.querySelector('select[name*="mortgage"]');
+            if (mortgageSelect && mortgageSelect.value) {
+                data.mortgageType = mortgageSelect.value;
+            }
+            
+            // City
+            const cityInput = form.querySelector('input[name*="city"]');
+            if (cityInput && cityInput.value.trim()) {
+                data.city = cityInput.value.trim();
+            }
+            
+            // Street/Metro
+            const streetInput = form.querySelector('input[name*="street"]');
+            if (streetInput && streetInput.value.trim()) {
+                data.streetMetro = streetInput.value.trim();
+            }
+            
+            // Complaint reason
+            const complaintRadio = form.querySelector('input[name*="complaint"]:checked');
+            if (complaintRadio) {
+                data.complaintReason = complaintRadio.value;
+            }
+            
+            // Details
+            const detailsTextarea = form.querySelector('textarea[name*="details"]');
+            if (detailsTextarea && detailsTextarea.value.trim()) {
+                data.details = detailsTextarea.value.trim();
+            }
+            
+            // Additional wishes (always last)
+            const additionalTextarea = form.querySelector('textarea[name*="additional"]');
+            if (additionalTextarea && additionalTextarea.value.trim()) {
+                data.additional = additionalTextarea.value.trim();
+            }
+            
+            return data;
+        }
+
+        function getFieldLabel(input) {
+            let label = input.closest('.form-group')?.querySelector('label')?.textContent;
+            if (!label) {
+                label = document.querySelector(`label[for="${input.id}"]`)?.textContent;
+            }
+            if (!label) {
+                label = input.name || input.id || 'Поле';
+            }
+            return label.replace(':', '').trim();
+        }
+
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            const requiredFields = {
+                'form1': ['name1'],
+                'form2': ['name2', 'district2'],
+                'form3': ['name3', 'address3'],
+                'form4': ['name4'],
+                'form6': ['name6', 'address6']
+            };
+            
+            const required = requiredFields[formId] || [];
+            
+            for (const fieldId of required) {
+                const field = document.getElementById(fieldId);
+                if (!field || !field.value.trim()) {
+                    field?.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showNotification('Данные скопированы в буфер обмена!', 'success');
+            } catch (err) {
+                showNotification('Ошибка при копировании данных', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 4000);
+        }
+        
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Данные скопированы в буфер обмена!', 'success');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleON1();
+            toggleTypeAndBudget2();
+            updateDynamicTexts1();
+            toggleOwnerFields6();
+        });
+    </script>
+</body>
+</html>
