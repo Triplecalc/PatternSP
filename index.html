@@ -457,20 +457,6 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>Роль:</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="agent2" name="role2" value="Агент" checked>
-                            <label for="agent2" class="radio-label">Агент</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="client2" name="role2" value="Клиент">
-                            <label for="client2" class="radio-label">Клиент</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
                     <label>Покупка/аренда:</label>
                     <div class="radio-group">
                         <div class="radio-option">
@@ -616,7 +602,7 @@
                 </div>
                 
                 <div id="maps-call-fields3" class="conditional-field">
-                    <div class="hint">Уточните, в каком городе вы хотите продать/сдать недвижемость?</div>
+                    <div class="hint">Уточните, в каком городе вы хотите продать/сдать недвижимость?</div>
                     <div class="form-group">
                         <label for="maps-city3">Город:</label>
                         <input type="text" id="maps-city3" name="maps-city3">
@@ -656,20 +642,6 @@
                     <label for="name3">Имя:</label>
                     <input type="text" id="name3" name="name3" oninput="updateGreeting('name3','greeting3')">
                     <div id="greeting3" class="hint"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Роль:</label>
-                    <div class="radio-group">
-                        <div class="radio-option">
-                            <input type="radio" id="agent3" name="role3" value="Агент" checked>
-                            <label for="agent3" class="radio-label">Агент</label>
-                        </div>
-                        <div class="radio-option">
-                            <input type="radio" id="client3" name="role3" value="Клиент">
-                            <label for="client3" class="radio-label">Клиент</label>
-                        </div>
-                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -742,47 +714,137 @@
                     <div id="greeting4" class="hint"></div>
                 </div>
                 
+                <!-- Removed "Тип ипотеки" field as per requirements -->
+                
                 <div class="form-group">
-                    <label>Роль:</label>
+                    <label>У вас уже подобран объект недвижимости?</label>
                     <div class="radio-group">
                         <div class="radio-option">
-                            <input type="radio" id="agent4" name="role4" value="Агент" checked>
-                            <label for="agent4" class="radio-label">Агент</label>
+                            <input type="radio" id="property-yes4" name="property-status4" value="Да" onchange="togglePropertyFields4()">
+                            <label for="property-yes4" class="radio-label">Да</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="client4" name="role4" value="Клиент">
-                            <label for="client4" class="radio-label">Клиент</label>
+                            <input type="radio" id="property-no4" name="property-status4" value="Нет" onchange="togglePropertyFields4()">
+                            <label for="property-no4" class="radio-label">Нет</label>
                         </div>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="mortgage-type4">Тип ипотеки:</label>
-                    <div id="mortgage-hint4" class="hint"></div>
-                    <select id="mortgage-type4" name="mortgage-type4">
-                        <option value="">Выберите тип</option>
-                        <option value="IT ипотека">IT ипотека</option>
-                        <option value="Семейная ипотека">Семейная ипотека</option>
-                        <option value="Стандартная ипотека">Обычная ипотека</option>
-                        <option value="Другая ипотека">Другая ипотека</option>
-                        <option value="Не определился">Не определился</option>
-                    </select>
+                <!-- Dynamic fields that appear when "No" is selected (object not selected, need to select) -->
+                <div id="property-details4" class="conditional-field">
+                    <div class="form-group">
+                        <label>Покупка/аренда:</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="purchase4" name="operation4" value="Покупка" checked onchange="toggleTypeAndBudget4()">
+                                <label for="purchase4" class="radio-label">Покупка</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="rent4" name="operation4" value="Аренда" onchange="toggleTypeAndBudget4()">
+                                <label for="rent4" class="radio-label">Аренда</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hint">Уточните адрес подбора</div>
+                    <div class="form-group">
+                        <label for="district4">Район подбора:</label>
+                        <input type="text" id="district4" name="district4">
+                    </div>
+                    
+                    <div id="type-block4" class="form-group">
+                        <div class="hint">Уточните, вас первичка или вторичка интересует?</div>
+                        <label>Тип:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="primary4" name="type4" value="Первичка" onchange="updateTypeOrder4()">
+                                <label for="primary4" class="checkbox-label"><span id="primary-number4"></span>Первичка</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="secondary4" name="type4" value="Вторичка" onchange="updateTypeOrder4()">
+                                <label for="secondary4" class="checkbox-label"><span id="secondary-number4"></span>Вторичка</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hint">Уточните тип недвижимости. Сколько комнат, площадь и этаж вас интересует?</div>
+                    <div class="form-group">
+                        <label for="rooms4">Кол.комнат:</label>
+                        <input type="text" id="rooms4" name="rooms4">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="area4">Площадь:</label>
+                        <input type="text" id="area4" name="area4">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="floor4">Этаж:</label>
+                        <input type="text" id="floor4" name="floor4">
+                        <div class="checkbox-group" style="margin-top: 8px;">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="not-first4" name="floor-options4" value="Не первый">
+                                <label for="not-first4" class="checkbox-label">Не первый</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="not-last4" name="floor-options4" value="Не последний">
+                                <label for="not-last4" class="checkbox-label">Не последний</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="hint">Какой у вас бюджет на покупку?</div>
+                    <div class="form-group">
+                        <label for="budget4">Бюджет:</label>
+                        <div class="budget-group">
+                            <input type="text" id="budget4" name="budget4">
+                            <select id="budget-unit4" name="budget-unit4">
+                                <option value="тыс">тыс</option>
+                                <option value="млн">млн</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="budget-comp-block4" class="form-group">
+                        <div class="hint">Из чего состоит ваш бюджет?</div>
+                        <label>Бюджет состоит из:</label>
+                        <div class="checkbox-group">
+                            <!-- Ипотека is pre-selected and non-changeable -->
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="mortgage4" name="budget-comp4" value="Ипотека" checked disabled>
+                                <label for="mortgage4" class="checkbox-label">Ипотека</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="matcap4" name="budget-comp4" value="Мат.кап">
+                                <label for="matcap4" class="checkbox-label">Мат.кап</label>
+                            </div>
+                            <!-- Removed наличка option as per requirements -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additional4">Дополнительные пожелания:</label>
+                        <textarea id="additional4" name="additional4"></textarea>
+                    </div>
                 </div>
                 
-                <div class="hint">В каком городе вас интересует услуга?</div>
-                <div class="form-group">
-                    <label for="city4">Город:</label>
-                    <input type="text" id="city4" name="city4">
-                </div>
-                
-                <div class="hint">На какой улице вы живете? Сейчас найду
+                <!-- Fields that appear when "Yes" is selected (object already selected) -->
+                <div id="property-yes-details4">
+                    <div class="hint">В каком городе вас интересует услуга?</div>
+                    <div class="form-group">
+                        <label for="city4">Город:</label>
+                        <input type="text" id="city4" name="city4">
+                    </div>
+                    
+                    <div class="hint">На какой улице вы живете? Сейчас найду
 ближайшие к ней офисы.</div>
-                <div class="form-group">
-                    <label for="street-metro4">Улица/Метро:</label>
-                    <input type="text" id="street-metro4" name="street-metro4">
+                    <div class="form-group">
+                        <label for="street-metro4">Улица/Метро:</label>
+                        <input type="text" id="street-metro4" name="street-metro4">
+                    </div>
                 </div>
                 
-                <div class="hint">«ИМЯ клиента заявка передана менеджеру, также передал/а ему ваши контакты. Менеджер свяжется с Вами в ближайшее время. Ожидайте звонка, всего доброго, до свидания!</div>
+                <div class="hint">«ИМЯ клиента заявка передана менедежеру, также передал/а ему ваши контакты. Менеджер свяжется с Вами в ближайшее время. Ожидайте звонка, всего доброго, до свидания!</div>
                 <button type="button" onclick="copyFormData('form4')">Копировать</button>
             </form>
         </div>
@@ -863,7 +925,20 @@
         // Greeting update function
         function updateGreeting(inputId, hintId) {
             const val = document.getElementById(inputId).value.trim();
-            const greetingText = val ? `${val}, очень приятно! Подскажите, Вы риелтор или для себя подбираете?` : '';
+            
+            // Different greeting logic for different tabs
+            let greetingText = '';
+            if (inputId === 'name1') {
+                // Tab 1 (Покупка/аренда конкретного ОН) - keep the original dynamic text
+                greetingText = val ? `${val}, очень приятно! Подскажите, Вы риелтор или для себя подбираете?` : '';
+            } else if (inputId === 'name4') {
+                // Tab 4 (Веб заявка) - use the new dynamic text
+                greetingText = val ? `${val}, очень приятно! Подскажите, у вас уже подобран объект недвижимости?` : '';
+            } else {
+                // Other tabs (form2, form3, etc.) - simplified greeting without role question
+                greetingText = val ? `${val}, очень приятно!` : '';
+            }
+            
             document.getElementById(hintId).textContent = greetingText;
             
             // Update dynamic role and name texts for Tab 1
@@ -875,6 +950,51 @@
             if (inputId === 'name4') {
                 updateMortgageHint4(val);
             }
+        }
+
+        // Toggle property fields for Tab 4
+        function togglePropertyFields4() {
+            const hasProperty = document.getElementById('property-yes4').checked;
+            // When "Yes" is selected (object already selected), show city/street fields
+            document.getElementById('property-yes-details4').style.display = hasProperty ? 'block' : 'none';
+            // When "No" is selected (object not selected, need to select), show property selection fields
+            document.getElementById('property-details4').style.display = !hasProperty ? 'block' : 'none';
+            
+            // Initialize type and budget visibility when showing property details
+            if (!hasProperty) {
+                toggleTypeAndBudget4();
+            }
+        }
+
+        // Toggle type and budget for Tab 4
+        function toggleTypeAndBudget4() {
+            const isRent = document.getElementById('rent4').checked;
+            document.getElementById('type-block4').style.display = isRent ? 'none' : 'block';
+            document.getElementById('budget-comp-block4').style.display = isRent ? 'none' : 'block';
+        }
+
+        // Update type selection order numbers for Tab 4
+        function updateTypeOrder4() {
+            const primaryCheckbox = document.getElementById('primary4');
+            const secondaryCheckbox = document.getElementById('secondary4');
+            const primaryNumber = document.getElementById('primary-number4');
+            const secondaryNumber = document.getElementById('secondary-number4');
+            
+            let order = 1;
+            
+            // Clear all numbers first
+            primaryNumber.textContent = '';
+            secondaryNumber.textContent = '';
+            
+            // Check which boxes are checked and assign numbers in order of checking
+            const checkedBoxes = [];
+            if (primaryCheckbox.checked) checkedBoxes.push({checkbox: primaryCheckbox, number: primaryNumber});
+            if (secondaryCheckbox.checked) checkedBoxes.push({checkbox: secondaryCheckbox, number: secondaryNumber});
+            
+            // Assign numbers based on selection order
+            checkedBoxes.forEach((item, index) => {
+                item.number.textContent = `${index + 1}. `;
+            });
         }
 
         // Update dynamic texts in Tab 1 greeting messages
@@ -1261,14 +1381,22 @@
             }
             
             // Role (from radio buttons)
-            const roleRadio = form.querySelector('input[name*="role"]:checked');
-            if (roleRadio) {
-                // For Tab 1, only include role if it's not the default "Агент"
-                if (form.id === 'form1' && roleRadio.value === 'Клиент') {
-                    data.role = roleRadio.value;
-                } else if (form.id !== 'form1') {
-                    // For other tabs, always include role
-                    data.role = roleRadio.value;
+            // Only include role for Tab 1, as other tabs no longer have role selection
+            if (form.id === 'form1') {
+                const roleRadio = form.querySelector('input[name*="role"]:checked');
+                if (roleRadio) {
+                    // For Tab 1, only include role if it's not the default "Агент"
+                    if (roleRadio.value === 'Клиент') {
+                        data.role = roleRadio.value;
+                    }
+                }
+            }
+            
+            // Property status for Tab 4
+            if (form.id === 'form4') {
+                const propertyRadio = form.querySelector('input[name*="property-status"]:checked');
+                if (propertyRadio) {
+                    data.propertyStatus = propertyRadio.value;
                 }
             }
             
@@ -1372,11 +1500,8 @@
                 data.office = officeInput.value.trim();
             }
             
-            // Mortgage type
-            const mortgageSelect = form.querySelector('select[name*="mortgage"]');
-            if (mortgageSelect && mortgageSelect.value) {
-                data.mortgageType = mortgageSelect.value;
-            }
+            // Mortgage type (only for Tab 4 in the old version, now removed)
+            // We no longer collect this information as per requirements
             
             // City
             const cityInput = form.querySelector('input[name*="city"]');
@@ -1428,9 +1553,50 @@
                 'form1': ['name1'],
                 'form2': ['name2', 'district2'],
                 'form3': ['name3', 'address3'],
-                'form4': ['name4'],
+                'form4': ['name4'], // Name is always required for Tab 4
                 'form6': ['name6', 'address6']
             };
+            
+            // For Tab 4, we need to check additional fields based on the property status
+            if (formId === 'form4') {
+                const propertyRadio = form.querySelector('input[name="property-status4"]:checked');
+                
+                // If no property status is selected, we still require at least the name
+                if (!propertyRadio) {
+                    const nameField = document.getElementById('name4');
+                    if (!nameField || !nameField.value.trim()) {
+                        nameField?.focus();
+                        return false;
+                    }
+                    return true;
+                }
+                
+                // If "Yes" is selected (object already selected), we need to validate city
+                if (propertyRadio.value === 'Да') {
+                    const cityField = document.getElementById('city4');
+                    if (!cityField || !cityField.value.trim()) {
+                        cityField?.focus();
+                        return false;
+                    }
+                }
+                // If "No" is selected (object not selected, need to select), we need to validate the property details
+                else if (propertyRadio.value === 'Нет') {
+                    const districtField = document.getElementById('district4');
+                    if (!districtField || !districtField.value.trim()) {
+                        districtField?.focus();
+                        return false;
+                    }
+                }
+                
+                // Always validate name
+                const nameField = document.getElementById('name4');
+                if (!nameField || !nameField.value.trim()) {
+                    nameField?.focus();
+                    return false;
+                }
+                
+                return true;
+            }
             
             const required = requiredFields[formId] || [];
             
@@ -1491,6 +1657,12 @@
             toggleTypeAndBudget2();
             updateDynamicTexts1();
             toggleOwnerFields6();
+            
+            // Initialize Tab 4 elements
+            // By default, show the "Yes" path (object already selected)
+            document.getElementById('property-details4').style.display = 'none';
+            document.getElementById('property-yes-details4').style.display = 'block';
+            toggleTypeAndBudget4();
         });
     </script>
 </body>
